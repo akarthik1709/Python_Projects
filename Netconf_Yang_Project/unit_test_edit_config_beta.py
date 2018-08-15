@@ -7,7 +7,7 @@ __author__ = "Karthik"
     > pip install lxml ncclient
 
     Running script: (save as example.py)
-    > python example.py -a 172.30.5.2 -u admin -p iDirect! --port 830
+    > python example.py -a server_ip -u admin -p password --port 830
 """
 
 import lxml.etree as ET
@@ -144,6 +144,7 @@ def function_to_invoke_get_and_edit_config():
 
 def func_payload(server_type_input, string_input1,string_input2, string_input3 ):
 
+    # yang module to edit the vlan
     if server_type_input == "1":
         payload = ("""
     <config>
@@ -165,7 +166,7 @@ def func_payload(server_type_input, string_input1,string_input2, string_input3 )
     </config>
    """) %(string_input2, string_input3 )
 
-
+    # yang module to edit the interface ID
     elif server_type_input == "2":
         payload = ("""
     <config>
@@ -187,6 +188,7 @@ def func_payload(server_type_input, string_input1,string_input2, string_input3 )
     </config>
     """) %(string_input2, string_input3 )
 
+    # yang modiule to edit the user defined VLAN 
     elif server_type_input == "3":
         payload = ("""
     <config>
@@ -208,6 +210,7 @@ def func_payload(server_type_input, string_input1,string_input2, string_input3 )
     </config>
    """) %(string_input2, string_input3 )
 
+    # yang module to edit the interface description
     elif server_type_input == "4":
         payload = ("""
     <config>
