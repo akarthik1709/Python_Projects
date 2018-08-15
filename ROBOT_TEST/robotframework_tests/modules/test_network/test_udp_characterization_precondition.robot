@@ -5,7 +5,7 @@ Suite Setup  Set Test Requirement
 Suite Teardown  Cleanup all config
 
 *** Variables ***
-${iPlatform}=  Velocity
+${iPlatform}=  test_network
 
 *** Test Cases ***
 Validate the Preconditions for DLG_UDP script
