@@ -1,5 +1,5 @@
 {
-        "network_file":"patriots",
+        "network_file":"red_sox",
         "component":"BDU-22502",
         "sspp_name":["SSPP SVN 2"],
         "sl_name":["SVN_2_TCP_DOWN","SVN_2_TCP_UP"],
