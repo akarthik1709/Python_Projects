@@ -1,0 +1,15 @@
+# Spirent Test center IP
+stc_ip :  172.16.1.60
+stc_slot :  8
+stc_hub_port :  11
+stc_remote_port :  12
+
+iPlatform: velocity
+
+# NMS IP address
+nms_ip: 172.17.240.10
+
+# ProxyServer
+proxy_ip:  172.20.65.120
+   
+

@@ -1,0 +1,9 @@
+{
+        "network_file":"patriots",
+        "component":"BDU-22502",
+        "sspp_name":["SSPP SVN 2"],
+        "sl_name":["SVN_2_TCP_DOWN","SVN_2_TCP_UP"],
+        "vlan_name" : ["VLAN_2"],
+        "spirent_cfg_mc_file_path" : "/network/spirent_patriots_mcast.cfg",
+        "spirent_cfg_tcp_file_path" : "/network/spirent_patriots_tcp.cfg"
+}
