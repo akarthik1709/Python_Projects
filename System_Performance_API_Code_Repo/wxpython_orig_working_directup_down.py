@@ -19,16 +19,12 @@ class Example(wx.Frame):
         super(Example, self).__init__(parent, title=title,
             size=(1000, 1000))
         self.Centre()
+        self.dir_array = []
         self.InitUI()
         self.parent = parent
         self.dir_array=[]
-        # self.parent.Update()
-        self.Refresh()
-        #self.on_timer()
-        #self.Bind(wx.EVT_SIZE, self.OnSize)
-        #self.Centre()
-        #self.SetSize(1000, 1000)
-        #self.Show(True)
+        self.SetSize(500, 500)
+        self.Show(True)
         
     
     
@@ -40,12 +36,6 @@ class Example(wx.Frame):
 	#self.Bind(wx.EVT_TIMER,self.InitUI())
 	#self.timer.Start(1000) #10 minutes
 
-    def ask(self, parent=None, message='', default_value=''):
-        dlg = wx.TextEntryDialog(parent, message, caption="GetTextFromUserPromptStr")
-        dlg.ShowModal()
-        result = dlg.GetValue()
-        dlg.Destroy()
-        return result
     
     def InitUI(self):
         self.pnl = wx.Panel(self)
@@ -54,15 +44,13 @@ class Example(wx.Frame):
         self.Refresh()
         self.Update()
         itm_initui = self.sizer.FindItemAtPosition((0, 0))
-        if (itm_initui!=None) and itm_initui.IsWindow():
-            self.sizer.Detach(itm_initui.GetWindow())
         self.rb0 = wx.RadioButton(self.pnl,11, label = 'None',pos = (10, 10), style = wx.RB_GROUP) 
         self.rb1 = wx.RadioButton(self.pnl,11, label = 'Upstream',pos = (10, 30)) 
-        #self.rb1.Bind(wx.EVT_RADIOBUTTON, self.layout_panel_downstream)
+        self.rb2 = wx.RadioButton(self.pnl,11, label = 'Downstream',pos = (10, 50)) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.layout_panel_upstream)
+        self.Bind(wx.EVT_RADIOBUTTON, self.layout_panel_downstream)
         
         self.Refresh()
-        self.rb2 = wx.RadioButton(self.pnl,22, label = 'Downstream',pos = (10, 50)) 
-        #self.rb2.Bind(wx.EVT_RADIOBUTTON, self.layout_panel_upstream)
         itm_initui1 = self.sizer.FindItemAtPosition((0, 0))
         if (itm_initui1!=None) and itm_initui1.IsWindow():
             self.sizer.Detach(itm_initui1.GetWindow())
@@ -88,15 +76,15 @@ class Example(wx.Frame):
     def onChecked(self, e):
         try:
             self.cb = e.GetEventObject() 
-            print self.cb.GetLabel(),' is clicked',self.cb.GetValue()
-            print type(self.cb.GetLabel())
+            print(self.cb.GetLabel(),' is clicked',self.cb.GetValue())
+            print(type(self.cb.GetLabel()))
 
-            if self.label_name == "Upstream" and self.cb.GetLabel() == "Default Downstream" and self.cb.GetValue() == True:
+            if self.label_name == b"Upstream" and self.cb.GetLabel() == "Default Downstream" and self.cb.GetValue() == True:
                 raise IncorrectcomboError  
-            elif self.label_name == "Downstream" and self.cb.GetLabel() == "Default Upstream" and self.cb.GetValue() == True:
+            elif self.label_name == b"Downstream" and self.cb.GetLabel() == b"Default Upstream" and self.cb.GetValue() == True:
                 raise IncorrectcomboError
 
-            if self.cb.GetValue() == True and self.cb.GetLabel() == "Default Upstream":
+            if self.cb.GetValue() == True:
                 print("I am inside if")
                 self.st_up_default = wx.StaticText(self.pnl, label='# of Default Carriers')
                 itmcomp124 = self.sizer.FindItemAtPosition((3, 4))
@@ -133,7 +121,7 @@ class Example(wx.Frame):
                 self.sizer.Add(self.stlabel, pos=(10, 0), span=(1,4), flag=wx.ALL, border=15)
                 self.pnl.SetSizerAndFit(self.sizer)
 
-            if self.cb.GetValue() == True and self.cb.GetLabel() == "Default Downstream":
+            if self.cb.GetValue() == True and self.cb.GetLabel() == b"Default Downstream":
                 print("I am inside downstream if")
                 
                 itmcomp12 = self.sizer.FindItemAtPosition((3, 2))
@@ -183,7 +171,7 @@ class Example(wx.Frame):
                 self.sizer.Add(self.stlabel, pos=(10, 0), span=(1,4), flag=wx.ALL, border=15)  
                 
                 self.pnl.SetSizerAndFit(self.sizer)
-            if self.cb.GetValue() == False and self.cb.GetLabel() == "Default Downstream":
+            if self.cb.GetValue() == False and self.GetLabel() == b"Default Downstream":
                 print("INSIDE FROM DEFAULT RESTORATION>>>")
                 self.stlabel.Hide()
                 self.st_up_default2.Hide()
@@ -200,9 +188,9 @@ class Example(wx.Frame):
                 #self.st9.Hide()
                 #self.st9a.Hide()
                 #self.combo.Hide()
-                self.layout_panel_downstream()
+                self.layout_panel_downstream
             
-            if self.cb.GetValue() == False and self.cb.GetLabel() == "Default Upstream":
+            if self.cb.GetValue() == False and self.GetLabel() == b"Default Upstream":
                 print("INSIDE FROM DEFAULT RESTORATION>>>")
                 self.stlabel.Hide()
                 self.st_up_default.Hide()
@@ -218,15 +206,11 @@ class Example(wx.Frame):
                 #self.st8.Hide()
 #                self.st9.Hide()
                 #self.st9a.Hide()
-                self.layout_panel_upstream()
+                self.layout_panel_upstream
 
-        except IncorrectcomboError:
+        except:
             wx.MessageBox("Please Enter the Correct Combination of the traffic direction and the default option. Please Re-open the console")
-            sys.exit(-1)  
-        #except:
-        #    import sys, traceback
-        #    #xc = traceback.format_exception(*sys.exc_info()
-        #    wx.MessageBox("Please enter the correct option")
+            sys.exit(-1)
         return self.cb 
 
     def OnSize(self, event):
@@ -260,9 +244,9 @@ class Example(wx.Frame):
             self.sizer.Delete(self.st7, pos=(9, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
             self.sizer.Delete(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
         """
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("These parameters are not modified")
-        elif not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2):
+        elif not (self.cb2.GetLabel() == b"Default Upstream" or self.cb2.GetValue() == True):
             print("I AM IN UPSTREAM DEFAULT>>>>")
             itma  = self.sizer.FindItemAtPosition((2,0))
             if (itma!= None) and itma.IsWindow():
@@ -330,7 +314,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15) 
             self.sizer.Add(self.st9a1, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15) 
        
-        if self.label_name == "Upstream":
+        if self.label_name == b"Upstream":
             print("PRINTING TO CHECK IN IF>>>><<")
             itm  = self.sizer.FindItemAtPosition((2,0))
             if (itm != None) and itm.IsWindow():
@@ -402,7 +386,7 @@ class Example(wx.Frame):
 
         
 
-        if self.dir_array[0] == "downstream" and self.dir_array[1] == "upstream":
+        if self.dir_array[0] == b"downstream":
             print("PRINTING TO CHECK IN IF>>>><<")
             itm  = self.sizer.FindItemAtPosition((2,0))
             if (itm != None) and itm.IsWindow():
@@ -461,7 +445,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9a1, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
         
         
-        symbol_selection = ["1 Carrier", "2 Carriers", "3 Carriers", "4 Carriers", "5 Carriers", "6 Carriers", "7 Carriers", "8 Carriers", "9 Carriers", "10 Carriers"]      
+        symbol_selection = [b"1 Carrier", b"2 Carriers", b"3 Carriers", b"4 Carriers", b"5 Carriers", b"6 Carriers", b"7 Carriers", b"8 Carriers", b"9 Carriers", b"10 Carriers"]      
         self.combo1 = wx.ComboBox(self.pnl,choices = symbol_selection)
 #        print self.combo1 + "KSps (1000 to 45000)"
         #self.choice = wx.Choice(self.pnl, choices= symbol_selection )
@@ -486,7 +470,7 @@ class Example(wx.Frame):
         #itmcom1 = self.sizer.FindItemAtPosition((10,1))
         #if itmcom1 == None:
         #    self.sizer.Add(self.combo1, pos=(10,1), flag=wx.ALL, border=15)
-        if self.label_name == "Upstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2 and self.cb2.GetLabel() == "Default Upstream":
+        if self.label_name == b"Upstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2 and self.cb2.GetLabel() == b"Default Upstream":
             print("I AM IN COMBO SELECTION UPSTREASM")
             itmcom1e = self.sizer.FindItemAtPosition((10,1))
             if (itmcom1e!= None) and itmcom1e.IsWindow():
@@ -524,7 +508,7 @@ class Example(wx.Frame):
                 self.sizer.Detach(self.itmcom1b.GetWindow())
                 self.st_up_default_values.Hide() 
         """
-        if not(self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not(self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("I AM IN DEFAULT UPSTREAM FALSE>>>")
             
             self.itmcom1a = self.sizer.FindItemAtPosition((3,4))
@@ -554,7 +538,7 @@ class Example(wx.Frame):
 #        print("TEXT OUTPUT", text_output)
          """
         """
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("DEFAULT")
         else:
             print("IN ELSE FOR ADDING COMBO>>")
@@ -653,7 +637,7 @@ class Example(wx.Frame):
             self.sizer.Delete(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
             self.sizer.Delete(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
         """
-        if self.label_name == "Upstream":
+        if self.label_name == b"Upstream":
             itm11b = self.sizer.FindItemAtPosition((3,1))
             if (itm11b!= None) and itm11b.IsWindow():
                 self.sizer.Detach(itm11b.GetWindow())
@@ -781,7 +765,7 @@ class Example(wx.Frame):
         computeButton.Bind(wx.EVT_BUTTON, self.OnCompute)
         closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
         
-        if self.label_name == "Upstream"  and self.cb2.GetValue() == False and len(self.dir_array) == 2:
+        if self.label_name == b"Upstream"  and self.cb2.GetValue() == False and len(self.dir_array) == 2:
             print("WHEN BOTH ARE IN UPSTREAM>>>>>?")
 
             itmcom1e = self.sizer.FindItemAtPosition((10,1))
@@ -828,7 +812,7 @@ class Example(wx.Frame):
             self.sizer.Add(closeButton, pos=(17, 1), flag=wx.ALIGN_LEFT|wx.BOTTOM, border=30)
             self.pnl.SetSizerAndFit(self.sizer)
 
-        if self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == "False":
+        if self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == "False":
             print("PRINTING TO CHECK IN FALSE AND DOWNSTREAM>><<>><<")
             itmcomp = self.sizer.FindItemAtPosition((17,0))
             if (itmcomp != None) and itmcomp.IsWindow():
@@ -839,7 +823,7 @@ class Example(wx.Frame):
             if (itmcomp1 != None) and itmcomp1.IsWindow():
                 self.sizer.Detach(itmcomp1.GetWindow())
                 #closeButton.Hide()
-        if self.label_name == "Upstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2:
+        if self.label_name == b"Upstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2:
             print("WHEN BOTH EL:EMENTS ARE UPSTREAM>>")
             
             itm11a = self.sizer.FindItemAtPosition((3,1))
@@ -890,9 +874,9 @@ class Example(wx.Frame):
                 self.sc5.Hide()
                 self.pnl.SetSizerAndFit(self.sizer)
 
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("These parameters are not modified")
-        elif not(self.label_name == "Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
+        elif not(self.label_name == b"Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
             itm11b = self.sizer.FindItemAtPosition((3,1))
             if (itm11b!= None) and itm11b.IsWindow():
                 self.sizer.Detach(itm11b.GetWindow())
@@ -949,7 +933,7 @@ class Example(wx.Frame):
         #computeButton.SetFocus()
         closeButton = wx.Button(self.pnl, label='Close')
 
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("DEFAULT")
         else:
             print("IN ELSE FOR ADDING COMBO>>")
@@ -962,9 +946,9 @@ class Example(wx.Frame):
             text = self.combo1.Bind(wx.EVT_COMBOBOX, self.OnCombo_upstream)  
             print("TEXT", text) 
         
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("THe values are fine")
-        elif not(self.label_name == "Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
+        elif not(self.label_name == b"Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
             itmcomp_down = self.sizer.FindItemAtPosition((17,0))
             if (itmcomp_down!=None) and itmcomp_down.IsWindow():
                 self.sizer.Detach(itmcomp_down.GetWindow())
@@ -976,7 +960,7 @@ class Example(wx.Frame):
                 closeButton.Hide()
             self.sizer.Add(computeButton, pos=(17, 0), flag=wx.ALIGN_RIGHT|wx.TOP, border=30) 
             self.sizer.Add(closeButton, pos=(17, 1), flag=wx.ALIGN_LEFT|wx.TOP, border=30)
-        if self.label_name == "Upstream":
+        if self.label_name == b"Upstream":
             itmcomp = self.sizer.FindItemAtPosition((17,0))
             if (itmcomp!=None) and itmcomp.IsWindow():
                 self.sizer.Detach(itmcomp.GetWindow())
@@ -986,9 +970,9 @@ class Example(wx.Frame):
                 self.sizer.Detach(itmcomp1.GetWindow())
                 closeButton.Hide()
         
-        if not (self.cb2.GetLabel() == "Default Upstream" and self.cb2.GetValue() == False and self.label_name == "Upstream"):
+        if not (self.cb2.GetLabel() == b"Default Upstream" and self.cb2.GetValue() == False and self.label_name == b"Upstream"):
             print("DEFAULT")
-        elif not(self.label_name == "Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
+        elif not(self.label_name == b"Upstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
             print("IN ELSE FOR ADDING COMBO>>")
             print("I AM HERE")
               
@@ -1002,7 +986,7 @@ class Example(wx.Frame):
 
             self.pnl.SetSizerAndFit(self.sizer)
         
-        if self.label_name == "Upstream":
+        if self.label_name == b"Upstream":
             #itm7b = self.sizer.FindItemAtPosition((10,2))
             #if (itm7b!= None) and itm7b.IsWindow():
             #    print("Adding the symbol static text")
@@ -1022,11 +1006,11 @@ class Example(wx.Frame):
             """
             print("In UPSTREAM FOR TEST???>>>")
             itmcom1 = self.sizer.FindItemAtPosition((10,1))
-            if (itmcom1!= None) and itmcom1.IsWindow():
+            if (itmcom1!= None):
                 self.sizer.Detach(itmcom1.GetWindow())
                 self.combo1.Hide()
             self.sizer.Add(self.combo1, pos=(10,1), flag=wx.ALL, border=15)
-            self.combo1.Bind(wx.EVT_COMBOBOX, self.OnCombo_upstream)
+            self.Bind(wx.EVT_COMBOBOX, self.OnCombo_upstream)
 
             self.pnl.SetSizerAndFit(self.sizer) 
             
@@ -1044,7 +1028,6 @@ class Example(wx.Frame):
         return (self.pnl, self.dir_array)
 
     def layout_panel_downstream(self):
-        #try:
         self.Refresh()
         self.Update()
         self.st1 = wx.StaticText(self.pnl, label='Downstream Automation Parameters')
@@ -1057,14 +1040,16 @@ class Example(wx.Frame):
         self.st7 = wx.StaticText(self.pnl, label=' PP Password:')
         self.st8 = wx.StaticText(self.pnl, label='# of Carriers:')
         self.st9a = wx.StaticText(self.pnl, label='KSps (1000 to 45000)')
+        
+        if self.dir_array:
+            self.dir_array.pop(-1)
+        
         self.dir_array.append("downstream")
 
         print("THE DIR ARRAY IS>>>>", self.dir_array) 
          
-        
-        if not (self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and self.label_name == "Downstream"):
-            print("These parameters are not modified")
-        elif not (self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2):
+         
+        if not (self.cb2.GetValue() == False and self.label_name == b"Downstream"):
             print("THE DEFAULT AND IN FALSE>>>>>>>")
             itma  = self.sizer.FindItemAtPosition((2,0))
             if (itma!= None) and itma.IsWindow():
@@ -1124,148 +1109,29 @@ class Example(wx.Frame):
             #self.pnl.SetSizerAndFit(self.sizer) 
 
         
-            self.sizer.Add(self.st1, pos=(2, 0), span=(1, 2), flag=wx.ALL, border=15)
-            self.sizer.Add(self.st0, pos=(3, 0), flag=wx.ALL, border=15)
+        self.sizer.Add(self.st1, pos=(2, 0), span=(1, 2), flag=wx.ALL, border=15)
+        self.sizer.Add(self.st0, pos=(3, 0), flag=wx.ALL, border=15)
+        self.sizer.Add(self.st2, pos=(4, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
 
-            self.sizer.Add(self.st2, pos=(4, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-
-            self.sizer.Add(self.st3, pos=(5, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st4, pos=(6, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st5, pos=(7, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st6, pos=(8, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st7, pos=(9, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15) 
-            self.sizer.Add(self.st9a, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.pnl.SetSizerAndFit(self.sizer) 
+        self.sizer.Add(self.st3, pos=(5, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.sizer.Add(self.st4, pos=(6, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.sizer.Add(self.st5, pos=(7, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.sizer.Add(self.st6, pos=(8, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.sizer.Add(self.st7, pos=(9, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.sizer.Add(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15) 
+        self.sizer.Add(self.st9a, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
+        self.pnl.SetSizerAndFit(self.sizer) 
         
-        if self.dir_array[0] == "upstream" and self.dir_array[1] == "downstream":
-            print("PRINTING TO CHECK IN IF>>>><<")
-            itm  = self.sizer.FindItemAtPosition((2,0))
-            if (itm != None) and itm.IsWindow():
-                self.sizer.Detach(itm.GetWindow())
-
-            itm0  = self.sizer.FindItemAtPosition((3,0))
-            if (itm0 != None) and itm0.IsWindow():
-                self.sizer.Detach(itm0.GetWindow())
-            itm1 = self.sizer.FindItemAtPosition((4,0))
-            if (itm1 != None) and itm1.IsWindow():
-                self.sizer.Detach(itm1.GetWindow())
-                self.st2.Hide()
-            itm2 = self.sizer.FindItemAtPosition((5,0))
-            if (itm2 != None) and itm2.IsWindow():
-                self.sizer.Detach(itm2.GetWindow())
-                self.st3.Hide()
-            itm3 = self.sizer.FindItemAtPosition((6,0))
-            if (itm3 != None) and itm3.IsWindow():
-                self.sizer.Detach(itm3.GetWindow())
-                self.st4.Hide()
-
-            itm4 = self.sizer.FindItemAtPosition((7,0))
-            if (itm4 != None) and itm4.IsWindow():
-                self.sizer.Detach(itm4.GetWindow())
-                self.st5.Hide()
-
-            itm5 = self.sizer.FindItemAtPosition((8,0))
-            if (itm5 != None) and itm5.IsWindow():
-                self.sizer.Detach(itm5.GetWindow())
-                self.st6.Hide()
-
-            itm6 = self.sizer.FindItemAtPosition((9,0))
-            if (itm6 != None) and itm6.IsWindow():
-                self.sizer.Detach(itm6.GetWindow())
-                self.st7.Hide()
-
-            itm7 = self.sizer.FindItemAtPosition((10,0))
-            if (itm7 != None) and itm7.IsWindow():
-                self.sizer.Detach(itm7.GetWindow())
-                self.st8.Hide()
-
-            itm71 = self.sizer.FindItemAtPosition((10,2))
-            if (itm71 != None) and itm71.IsWindow():
-                self.sizer.Detach(itm71.GetWindow())
-                self.st9a.Hide()
-
-            self.sizer.Add(self.st1, pos=(2, 0), span=(1, 2), flag=wx.ALL, border=15)
-            self.sizer.Add(self.st0, pos=(3, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st2, pos=(4, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st3, pos=(5, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st4, pos=(6, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st5, pos=(7, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st6, pos=(8, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st7, pos=(9, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st9a, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.pnl.SetSizerAndFit(self.sizer) 
-
-
         symbol_selection = ["1 Carrier", "2 Carriers", "3 Carriers", "4 Carriers", "5 Carriers", "6 Carriers", "7 Carriers", "8 Carriers", "9 Carriers", "10 Carriers"]      
         self.combo = wx.ComboBox(self.pnl,choices = symbol_selection)
         #self.choice = wx.Choice(self.pnl, choices= symbol_selection )
-        if self.dir_array[0] == "upstream" and self.dir_array[1] == "downstream":
+        if self.dir_array[0] == "downstream":
             itmcom1v = self.sizer.FindItemAtPosition((10,1))
             if (itmcom1v!= None) and itmcom1v.IsWindow():
                 self.sizer.Detach(itmcom1v.GetWindow())
                 #self.combo.Hide()
             self.sizer.Add(self.combo, pos=(10,1), flag=wx.ALL, border=15)
             self.pnl.SetSizerAndFit(self.sizer)
-
-        if self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2:
-            print("I AM IN COMBO SELECTTION>>")
-            
-            itmcom1e = self.sizer.FindItemAtPosition((10,1))
-            if (itmcom1e!= None) and itmcom1e.IsWindow():
-                self.sizer.Detach(itmcom1e.GetWindow())
-                #self.combo.Hide()
-
-            itm7a = self.sizer.FindItemAtPosition((10,0))
-            if (itm7a!= None) and itm7a.IsWindow():
-                print("Adding the symbol static text")
-                self.sizer.Detach(itm7a.GetWindow())
-                self.st8.Hide()
-            #self.pnl.SetSizerAndFit(self.sizer) 
-
-            itm7b = self.sizer.FindItemAtPosition((10,2))
-            if (itm7b!= None) and itm7b.IsWindow():
-                print("Adding the symbol static text")
-                self.sizer.Detach(itm7b.GetWindow())
-                self.st9a.Hide()
-            #self.pnl.SetSizerAndFit(self.sizer)
-            
-            self.sizer.Add(self.combo, pos=(10,1), flag=wx.ALL, border=15)
-            self.combo.Bind(wx.EVT_COMBOBOX, self.OnCombo_downstream)
-
-            self.sizer.Add(self.st8, pos=(10, 0), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
-            self.sizer.Add(self.st9a, pos=(10, 2), flag=wx.ALL | wx.ALIGN_CENTER, border=15) 
-            self.pnl.SetSizerAndFit(self.sizer)
-
-            self.itmcom1a = self.sizer.FindItemAtPosition((3,4))
-            if (self.itmcom1a!= None) and self.itmcom1a.IsWindow() and self.itmcom1a.IsShown():
-                self.sizer.Detach(self.itmcom1a.GetWindow())
-                self.st_up_default2.Hide()
-
-            self.itmcom1b = self.sizer.FindItemAtPosition((3,5))
-            if (self.itmcom1b!= None) and self.itmcom1b.IsWindow():
-                self.sizer.Detach(self.itmcom1b.GetWindow())
-                self.st_up_default_values.Hide()
-
-
-        #if self.cb.GetLabel() == "Default Downstream" and self.cb.GetValue() == False:
-        #    itmcom1234 = self.sizer.FindItemAtPosition((10,1))
-        #    if itmcom1234.IsWindow():
-        #        self.sizer.Detach(itmcom1234.GetWindow()) 
-
-        
-            
-                #self.combo.Hide()
-            
-        #self.sizer.Add(self.choice, pos=(8,1), flag=wx.ALL, border=15)
-
-        #text_output = self.OnCombo1(wx.EVT_COMBOBOX)
-        #print("TEXT OUTPUT", text_output)
-        
-        #print("TEXT", text)
-        
-        #self.choice.Bind(wx.EVT_CHOICE, self.OnChoice)
 
         self.sc0 = wx.TextCtrl(self.pnl)
         self.sc0.SetMaxLength(15)
@@ -1324,102 +1190,19 @@ class Example(wx.Frame):
         #self.sc5.Bind(wx.EVT_TEXT_MAXLEN,self.OnMaxLen)
         print("THE KEY TYPED", result)
 
-        """
-        self.sc1 = wx.SpinCtrl(self.pnl, value='0')
-        self.sc.Bind(wx.EVT_TEXT_MAXLEN,self.OnMaxLen)
-        self.sc1.SetRange(-459, 1000)
-
-        self.sc2 = wx.SpinCtrl(self.pnl, value='0')
-        self.sc2.SetRange(-459, 1000)
-
-        self.sc3 = wx.SpinCtrl(self.pnl, value='0')
-        self.sc3.SetRange(-459, 1000)
-
-        self.sc4 = wx.SpinCtrl(self.pnl, value='0')
-        self.sc4.SetRange(-459, 1000)
-
-        self.sc5 = wx.SpinCtrl(self.pnl, value='0')
-        self.sc5.SetRange(-459, 1000)
-        """
-        
-
-        #self.sc6 = wx.SpinCtrl(pnl, value='0')
-        #self.sc6.SetRange(-459, 1000)
-        
-        """
-        if self.label_name == "Upstream": 
-            self.sizer.Delete(self.sc, pos=(4, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Delete(self.sc1, pos=(5, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Delete(self.sc2, pos=(6, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Delete(self.sc3, pos=(7, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Delete(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Delete(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
-        """
-        
-        if self.dir_array[0] == "upstream" and self.dir_array[1] == "downstream":
-            print("I AM IN BLANKS CONDITION CHECK>>>")
-            itm11a = self.sizer.FindItemAtPosition((3,1))
-            if (itm11a!= None) or itm11a.IsWindow():
-                self.sizer.Detach(itm11a.GetWindow())
-                print("TEST IN WINDOW1")
-                self.sc0.Hide()
-                self.pnl.SetSizerAndFit(self.sizer) 
-            itm11asec = self.sizer.FindItemAtPosition((3,2))
-            if (itm11asec!= None) or itm11asec.IsWindow():
-                self.sizer.Detach(itm11asec.GetWindow())
-                print("TEST IN WINDOW2")
-                self.sc0a.Hide()
-
-
-            itm11 = self.sizer.FindItemAtPosition((4,1))
-            if (itm11!= None) or itm11.IsWindow():
-                self.sizer.Detach(itm11.GetWindow())
-                print("TEST IN WINDOW3")
-                self.sc.Hide()
-
-            itm12 = self.sizer.FindItemAtPosition((5,1))
-            if (itm12!= None) or itm12.IsWindow():
-                self.sizer.Detach(itm12.GetWindow())
-                print("TEST IN WINDOW4")
-                self.sc1.Hide()
-
-            itm13 = self.sizer.FindItemAtPosition((6,1))
-            if (itm13!= None) or itm13.IsWindow():
-                self.sizer.Detach(itm13.GetWindow())
-                print("TEST IN WINDOW5")
-                self.sc2.Hide()
-
-            itm14 = self.sizer.FindItemAtPosition((7,1))
-            if (itm14!= None) or itm14.IsWindow():
-                self.sizer.Detach(itm14.GetWindow())
-                print("TEST IN WINDOW6")
-                self.sc3.Hide()
-
-            itm15 = self.sizer.FindItemAtPosition((8,1))
-            if (itm15!= None) or itm15.IsWindow():
-                self.sizer.Detach(itm15.GetWindow())
-                print("TEST IN WINDOW7")
-                self.sc4.Hide()
-
-            itm16 = self.sizer.FindItemAtPosition((9,1))
-            if (itm16!= None) or itm16.IsWindow():
-                self.sizer.Detach(itm16.GetWindow())
-                print("TEST IN WINDOW8")
-                self.sc5.Hide()
                  
-            self.sizer.Add(self.sc0, pos=(3, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc0a, pos=(3, 2), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc, pos=(4, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc1, pos=(5, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc2, pos=(6, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc3, pos=(7, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
-            self.sizer.Add(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
-            self.pnl.SetSizerAndFit(self.sizer)
+        self.sizer.Add(self.sc0, pos=(3, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc0a, pos=(3, 2), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc, pos=(4, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc1, pos=(5, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc2, pos=(6, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc3, pos=(7, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
+        self.sizer.Add(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
+        self.pnl.SetSizerAndFit(self.sizer)
             
-        
          
-        if self.label_name == "Downstream" and self.cb2.GetValue() == False and len(self.dir_array) == 2:
+        if not self.label_name == b"Downstream" and self.cb2.GetValue() == False and len(self.dir_array) == 1:
             print("WHEN BOTH EL:EMENTS ARE DOWNSTREAM>>")
             
             itm11a = self.sizer.FindItemAtPosition((3,1))
@@ -1470,14 +1253,14 @@ class Example(wx.Frame):
                 self.sc5.Hide()
                 self.pnl.SetSizerAndFit(self.sizer)
                 
-            #self.sizer.Add(self.sc0, pos=(3, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc0a, pos=(3, 2), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc, pos=(4, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc1, pos=(5, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc2, pos=(6, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc3, pos=(7, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
-            #self.sizer.Add(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc0, pos=(3, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc0a, pos=(3, 2), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc, pos=(4, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc1, pos=(5, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc2, pos=(6, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc3, pos=(7, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc4, pos=(8, 1), flag=wx.ALIGN_CENTER)
+            self.sizer.Add(self.sc5, pos=(9, 1), flag=wx.ALIGN_CENTER)
 
             self.pnl.SetSizerAndFit(self.sizer) 
             
@@ -1490,7 +1273,7 @@ class Example(wx.Frame):
         """
         if not (self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and self.label_name == "Downstream"):
             print("These parameters are not modified")
-        elif not(self.label_name == "Downstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
+        elif not (self.label_name == b"Downstream" and self.cb2.GetValue() == False and len(self.dir_array) ==1):
             print("ADDING THE BLANKS>>>")
             itm11b = self.sizer.FindItemAtPosition((3,1))
             if (itm11b!= None) and itm11b.IsWindow():
@@ -1546,7 +1329,7 @@ class Example(wx.Frame):
         #self.celsius = wx.StaticText(pnl, label='')
         #self.sizer.Add(self.celsius, pos=(2, 1), flag=wx.ALL, border=15)
         
-        if not (self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and self.label_name == "Downstream"):
+        if not (self.cb2.GetLabel() == b"Default Downstream" and self.cb2.GetValue() == False and self.label_name == b"Downstream"):
             print("DEFAULT")
         elif not(self.label_name == "Downstream" and self.cb2.GetValue() == False and len(self.dir_array) ==2):
             print("IN ELSE FOR ADDING COMBO>>")
@@ -1569,9 +1352,7 @@ class Example(wx.Frame):
         #computeButton.SetFocus()
         closeButton = wx.Button(self.pnl, label='Close')
         
-        if not (self.cb2.GetLabel() == "Default Downstream" and self.cb2.GetValue() == False and self.label_name == "Downstream"):
-            print("THe values are fine")
-        else:
+        if not (self.cb2.GetLabel() == b"Default Downstream" and self.cb2.GetValue() == False and self.label_name == b"Downstream"):
             itmcomp_down = self.sizer.FindItemAtPosition((17,0))
             if (itmcomp_down!=None) and itmcomp_down.IsWindow():
                 self.sizer.Detach(itmcomp_down.GetWindow())
@@ -1594,21 +1375,6 @@ class Example(wx.Frame):
                 self.sizer.Detach(itmcomp1.GetWindow())
                 closeButton.Hide()
             
-
-        #itm_compute = self.sizer.FindItemAtPosition((17,0))
-        #if (itm_compute ==None):
-       # self.sizer.Add(computeButton, pos=(17, 0), flag=wx.ALIGN_RIGHT|wx.TOP, border=30) 
-        
-        #itm_close = self.sizer.FindItemAtPosition((17,1))
-        #if (itm_close == None):
-        #    self.sizer.Add(closeButton, pos=(17, 1), flag=wx.ALIGN_LEFT|wx.TOP, border=30) 
-            
-
-        #self.sizer.Add(closeButton, pos=(17, 1), flag=wx.ALIGN_LEFT|wx.TOP, border=30)
-        
-        computeButton.Bind(wx.EVT_BUTTON, self.OnCompute)
-        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
-
         self.UpdateWindowUI(wx.UPDATE_UI_FROMIDLE)
         self.Refresh()
         self.Update()
@@ -1616,10 +1382,6 @@ class Example(wx.Frame):
         self.SetTitle('LAYER 1 AUTOMATION CONSOLE')
         self.Centre()
         
-            #self.text_parameters()
-        #except:
-        #wx.MessageBox("Please Enter the correct COmbination. PLease Re-open the console..:)")
-            #sys.exit(-1)
         return self.pnl
 
     def hide_downstream(self, event):
@@ -1686,11 +1448,11 @@ class Example(wx.Frame):
         print("THE PP Pass", self.text_pppass)
 
     def OnMaxLen(self,event): 
-      print "Maximum length reached"
+      print("Maximum length reached")
 
     def OnRadiogroup(self, e): 
       
-      
+      print("EVENT OBJ", e.GetEventObject()) 
       rb = e.GetEventObject()
       rb.Refresh()
        
@@ -1703,9 +1465,7 @@ class Example(wx.Frame):
       #self.dir_array = dir_array
       
        
-      if self.label_name == "Upstream":
-        #self.layout_panel_downstream()
-        
+      if self.label_name == b"Upstream":
         self.layout_panel_upstream()
         self.Bind(wx.EVT_CHECKBOX,self.onChecked) 
         self.Centre() 
@@ -1730,7 +1490,7 @@ class Example(wx.Frame):
         self.pnl.SetSizerAndFit(self.sizer)
         #self.Show(False)
 
-      elif self.label_name == "Downstream":
+      elif self.label_name == b"Downstream":
 
         self.layout_panel_downstream()
       
@@ -1745,7 +1505,6 @@ class Example(wx.Frame):
         #self.sizer.Fit()
         self.item_extender =  wx.StaticText(self.pnl, label='Bears Network') 
         item_bears = self.sizer.FindItemAtPosition((20,20))
-        self.item_extender.Hide()
         if item_bears != None and item_bears.IsWindow():
             self.sizer.Detach(item_bears.GetWindow())
             self.sizer.Add(self.item_extender, pos=(20, 20), flag=wx.ALL | wx.ALIGN_CENTER, border=15)
@@ -1778,9 +1537,9 @@ class Example(wx.Frame):
         self.st99 = wx.StaticText(self.pnl, label='     Carrier10:')
             
 
-        if text_field == "1 Carrier":
+        if text_field == b"1 Carrier":
             #self.text_parameters()
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -1791,7 +1550,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -1976,7 +1735,7 @@ class Example(wx.Frame):
                 self.sc98.Hide()
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "2 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -1987,7 +1746,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2000,7 +1759,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2009,7 +1768,7 @@ class Example(wx.Frame):
                 if (itm401n != None) and itm401n.IsWindow():
                     self.sizer.Detach(itm401n.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2020,7 +1779,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc91, pos=(12, 1), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "3 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2031,7 +1790,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2044,7 +1803,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2053,7 +1812,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2065,7 +1824,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2074,7 +1833,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2085,7 +1844,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc92, pos=(13, 1), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "4 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2096,7 +1855,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2109,7 +1868,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2118,7 +1877,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2130,7 +1889,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2139,7 +1898,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2151,7 +1910,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2160,7 +1919,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2171,7 +1930,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "5 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2182,7 +1941,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2195,7 +1954,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2204,7 +1963,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2216,7 +1975,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2225,7 +1984,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2237,7 +1996,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2246,7 +2005,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2256,7 +2015,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -2267,7 +2026,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -2278,7 +2037,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc94, pos=(15, 1), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "6 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2289,7 +2048,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2302,7 +2061,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2311,7 +2070,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2323,7 +2082,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2332,7 +2091,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2344,7 +2103,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2353,7 +2112,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2363,7 +2122,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -2374,7 +2133,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -2386,7 +2145,7 @@ class Example(wx.Frame):
             
             self.sc95 = wx.SpinCtrl(self.pnl, value='0')
             self.sc95.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm411 = self.sizer.FindItemAtPosition((4,4))
                 if (itm411 != None) and itm411.IsWindow():
                     self.sizer.Detach(itm411.GetWindow())
@@ -2395,7 +2154,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st95, pos=(4, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm412 = self.sizer.FindItemAtPosition((4,5))
                 if (itm412!=None) and itm412.IsWindow():
                     self.sizer.Detach(itm412.GetWindow())
@@ -2406,7 +2165,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc95, pos=(4,5), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "7 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2417,7 +2176,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2430,7 +2189,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2439,7 +2198,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2451,7 +2210,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2460,7 +2219,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2472,7 +2231,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2481,7 +2240,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2491,7 +2250,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -2502,7 +2261,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -2514,7 +2273,7 @@ class Example(wx.Frame):
             
             self.sc95 = wx.SpinCtrl(self.pnl, value='0')
             self.sc95.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm411 = self.sizer.FindItemAtPosition((4,4))
                 if (itm411 != None) and itm411.IsWindow():
                     self.sizer.Detach(itm411.GetWindow())
@@ -2523,7 +2282,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st95, pos=(4, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm412 = self.sizer.FindItemAtPosition((4,5))
                 if (itm412!=None) and itm412.IsWindow():
                     self.sizer.Detach(itm412.GetWindow())
@@ -2535,7 +2294,7 @@ class Example(wx.Frame):
             
             self.sc96 = wx.SpinCtrl(self.pnl, value='0')
             self.sc96.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm413 = self.sizer.FindItemAtPosition((5,4))
                 if (itm413!=None) and itm413.IsWindow():
                     self.sizer.Detach(itm413.GetWindow())
@@ -2544,7 +2303,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st96, pos=(5, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm414 = self.sizer.FindItemAtPosition((5,5))
                 if (itm414!=None) and itm414.IsWindow():
                     self.sizer.Detach(itm414.GetWindow())
@@ -2555,7 +2314,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc96, pos=(5, 5), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "8 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2566,7 +2325,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2579,7 +2338,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2588,7 +2347,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2600,7 +2359,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2609,7 +2368,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2621,7 +2380,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2630,7 +2389,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2640,7 +2399,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -2651,7 +2410,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -2663,7 +2422,7 @@ class Example(wx.Frame):
             
             self.sc95 = wx.SpinCtrl(self.pnl, value='0')
             self.sc95.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm411 = self.sizer.FindItemAtPosition((4,4))
                 if (itm411 != None) and itm411.IsWindow():
                     self.sizer.Detach(itm411.GetWindow())
@@ -2672,7 +2431,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st95, pos=(4, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm412 = self.sizer.FindItemAtPosition((4,5))
                 if (itm412!=None) and itm412.IsWindow():
                     self.sizer.Detach(itm412.GetWindow())
@@ -2684,7 +2443,7 @@ class Example(wx.Frame):
             
             self.sc96 = wx.SpinCtrl(self.pnl, value='0')
             self.sc96.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm413 = self.sizer.FindItemAtPosition((5,4))
                 if (itm413!=None) and itm413.IsWindow():
                     self.sizer.Detach(itm413.GetWindow())
@@ -2693,7 +2452,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st96, pos=(5, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm414 = self.sizer.FindItemAtPosition((5,5))
                 if (itm414!=None) and itm414.IsWindow():
                     self.sizer.Detach(itm414.GetWindow())
@@ -2705,7 +2464,7 @@ class Example(wx.Frame):
             
             self.sc97 = wx.SpinCtrl(self.pnl, value='0')
             self.sc97.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm415 = self.sizer.FindItemAtPosition((6,4))
                 if (itm415!=None) and itm415.IsWindow():
                     self.sizer.Detach(itm415.GetWindow())
@@ -2714,7 +2473,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st97, pos=(6, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm416 = self.sizer.FindItemAtPosition((6,5))
                 if (itm416!=None) and itm416.IsWindow():
                     self.sizer.Detach(itm416.GetWindow())
@@ -2725,7 +2484,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.sc97, pos=(6, 5), flag=wx.TOP | wx.EXPAND)
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "9 Carriers":
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2739,7 +2498,7 @@ class Example(wx.Frame):
                 self.st9.Hide()
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2754,7 +2513,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2763,7 +2522,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2775,7 +2534,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2784,7 +2543,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2796,7 +2555,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2805,7 +2564,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2815,7 +2574,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -2826,7 +2585,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -2838,7 +2597,7 @@ class Example(wx.Frame):
             
             self.sc95 = wx.SpinCtrl(self.pnl, value='0')
             self.sc95.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm411 = self.sizer.FindItemAtPosition((4,4))
                 if (itm411 != None) and itm411.IsWindow():
                     self.sizer.Detach(itm411.GetWindow())
@@ -2847,7 +2606,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st95, pos=(4, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm412 = self.sizer.FindItemAtPosition((4,5))
                 if (itm412!=None) and itm412.IsWindow():
                     self.sizer.Detach(itm412.GetWindow())
@@ -2859,7 +2618,7 @@ class Example(wx.Frame):
             
             self.sc96 = wx.SpinCtrl(self.pnl, value='0')
             self.sc96.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm413 = self.sizer.FindItemAtPosition((5,4))
                 if (itm413!=None) and itm413.IsWindow():
                     self.sizer.Detach(itm413.GetWindow())
@@ -2868,7 +2627,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st96, pos=(5, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm414 = self.sizer.FindItemAtPosition((5,5))
                 if (itm414!=None) and itm414.IsWindow():
                     self.sizer.Detach(itm414.GetWindow())
@@ -2880,7 +2639,7 @@ class Example(wx.Frame):
             
             self.sc97 = wx.SpinCtrl(self.pnl, value='0')
             self.sc97.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm415 = self.sizer.FindItemAtPosition((6,4))
                 if (itm415!=None) and itm415.IsWindow():
                     self.sizer.Detach(itm415.GetWindow())
@@ -2889,7 +2648,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st97, pos=(6, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm416 = self.sizer.FindItemAtPosition((6,5))
                 if (itm416!=None) and itm416.IsWindow():
                     self.sizer.Detach(itm416.GetWindow())
@@ -2901,7 +2660,7 @@ class Example(wx.Frame):
             
             self.sc98 = wx.SpinCtrl(self.pnl, value='0')
             self.sc98.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm417 = self.sizer.FindItemAtPosition((7,4))
                 if (itm417!=None) and itm417.IsWindow():
                     self.sizer.Detach(itm417.GetWindow())
@@ -2910,7 +2669,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st98, pos=(7, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm436 = self.sizer.FindItemAtPosition((7,5))
                 if (itm436!= None) and itm436.IsWindow():
                     self.sizer.Detach(itm436.GetWindow())
@@ -2922,7 +2681,7 @@ class Example(wx.Frame):
             self.pnl.SetSizerAndFit(self.sizer)
         if text_field == "10 Carriers":
             #self.text_parameters()
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm40 = self.sizer.FindItemAtPosition((11,0))
                 if (itm40 != None) and itm40.IsWindow():
                     self.sizer.Detach(itm40.GetWindow())
@@ -2933,7 +2692,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st9, pos=(11, 0), flag=wx.TOP | wx.EXPAND, border=5)
             self.sc91a = wx.SpinCtrl(self.pnl, value='0')
             self.sc91a.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm41 = self.sizer.FindItemAtPosition((11,1))
                 if (itm41!=None) and itm41.IsWindow():
                     self.sizer.Detach(itm41.GetWindow())
@@ -2946,7 +2705,7 @@ class Example(wx.Frame):
             
             self.sc91 = wx.SpinCtrl(self.pnl, value='0')
             self.sc91.SetRange(128 , 7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm43 = self.sizer.FindItemAtPosition((12,0))
                 if (itm43!= None) and itm43.IsWindow():
                     self.sizer.Detach(itm43.GetWindow())
@@ -2955,7 +2714,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st91, pos=(12, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm44 = self.sizer.FindItemAtPosition((12,1))
                 if (itm44!= None) and itm44.IsWindow():
                     self.sizer.Detach(itm44.GetWindow())
@@ -2967,7 +2726,7 @@ class Example(wx.Frame):
             
             self.sc92 = wx.SpinCtrl(self.pnl, value='0')
             self.sc92.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm45 = self.sizer.FindItemAtPosition((13,0))
                 if (itm45!=None) and itm45.IsWindow():
                     self.sizer.Detach(itm45.GetWindow())
@@ -2976,7 +2735,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st92, pos=(13, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((13,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -2988,7 +2747,7 @@ class Example(wx.Frame):
             
             self.sc93 = wx.SpinCtrl(self.pnl, value='0')
             self.sc93.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm47 = self.sizer.FindItemAtPosition((14,0))
                 if (itm47 != None) and itm47.IsWindow():
                     self.sizer.Detach(itm47.GetWindow())
@@ -2997,7 +2756,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st93, pos=(14, 0), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":     
+            if self.label_name == b"Upstream":     
                 itm46 = self.sizer.FindItemAtPosition((14,1))
                 if (itm46!= None) and itm46.IsWindow():
                     self.sizer.Detach(itm46.GetWindow())
@@ -3007,7 +2766,7 @@ class Example(wx.Frame):
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.sc93, pos=(14, 1), flag=wx.TOP | wx.EXPAND)
             
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm48 = self.sizer.FindItemAtPosition((15,0))
                 if (itm48 != None) and itm48.IsWindow():
                     self.sizer.Detach(itm48.GetWindow())
@@ -3018,7 +2777,7 @@ class Example(wx.Frame):
             self.sizer.Add(self.st94, pos=(15, 0), flag=wx.TOP | wx.EXPAND, border=15)
             self.sc94 = wx.SpinCtrl(self.pnl, value='0')
             self.sc94.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm49 = self.sizer.FindItemAtPosition((15,1))
                 if (itm49 != None) and itm49.IsWindow():
                     self.sizer.Detach(itm49.GetWindow())
@@ -3030,7 +2789,7 @@ class Example(wx.Frame):
             
             self.sc95 = wx.SpinCtrl(self.pnl, value='0')
             self.sc95.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm411 = self.sizer.FindItemAtPosition((4,4))
                 if (itm411 != None) and itm411.IsWindow():
                     self.sizer.Detach(itm411.GetWindow())
@@ -3040,7 +2799,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st95, pos=(4, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm412 = self.sizer.FindItemAtPosition((4,5))
                 if (itm412!=None) and itm412.IsWindow():
                     self.sizer.Detach(itm412.GetWindow())
@@ -3052,7 +2811,7 @@ class Example(wx.Frame):
             
             self.sc96 = wx.SpinCtrl(self.pnl, value='0')
             self.sc96.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm413 = self.sizer.FindItemAtPosition((5,4))
                 if (itm413!=None) and itm413.IsWindow():
                     self.sizer.Detach(itm413.GetWindow())
@@ -3061,7 +2820,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st96, pos=(5, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm414 = self.sizer.FindItemAtPosition((5,5))
                 if (itm414!=None) and itm414.IsWindow():
                     self.sizer.Detach(itm414.GetWindow())
@@ -3073,7 +2832,7 @@ class Example(wx.Frame):
             
             self.sc97 = wx.SpinCtrl(self.pnl, value='0')
             self.sc97.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm415 = self.sizer.FindItemAtPosition((6,4))
                 if (itm415!=None) and itm415.IsWindow():
                     self.sizer.Detach(itm415.GetWindow())
@@ -3082,7 +2841,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st97, pos=(6, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm416 = self.sizer.FindItemAtPosition((6,5))
                 if (itm416!=None) and itm416.IsWindow():
                     self.sizer.Detach(itm416.GetWindow())
@@ -3094,7 +2853,7 @@ class Example(wx.Frame):
             
             self.sc98 = wx.SpinCtrl(self.pnl, value='0')
             self.sc98.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm417 = self.sizer.FindItemAtPosition((7,4))
                 if (itm417!=None) and itm417.IsWindow():
                     self.sizer.Detach(itm417.GetWindow())
@@ -3103,7 +2862,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st98, pos=(7, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm436 = self.sizer.FindItemAtPosition((7,5))
                 if (itm436!= None) and itm436.IsWindow():
                     self.sizer.Detach(itm436.GetWindow())
@@ -3115,7 +2874,7 @@ class Example(wx.Frame):
 		    
             self.sc99 = wx.SpinCtrl(self.pnl, value='0')
             self.sc99.SetRange(128,7500)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm418 = self.sizer.FindItemAtPosition((8,4))
                 if (itm418!=None) and itm418.IsWindow():
                     self.sizer.Detach(itm418.GetWindow())
@@ -3124,7 +2883,7 @@ class Example(wx.Frame):
                 if (itm401 != None) and itm401.IsWindow():
                     self.sizer.Detach(itm401.GetWindow())
             self.sizer.Add(self.st99, pos=(8, 4), flag=wx.TOP | wx.EXPAND, border=15)
-            if self.label_name == "Upstream":
+            if self.label_name == b"Upstream":
                 itm437 = self.sizer.FindItemAtPosition((8,5))
                 if (itm437!= None) and itm437.IsWindow():
                     self.sizer.Detach(itm437.GetWindow())
@@ -3139,8 +2898,8 @@ class Example(wx.Frame):
         return text_field
 
     def OnCombo_downstream(self, event): 
-        #text_field = self.combo.GetValue().encode("utf-8")
-        """ 
+        text_field = self.combo.GetValue().encode("utf-8")
+         
         print ("The value got from on combo is", text_field)
         if text_field == "1 Carrier":
             self.text_parameters()
@@ -3288,7 +3047,7 @@ class Example(wx.Frame):
             self.sc99.SetRange(-459, 1000)
             
             self.sizer.Add(self.sc99, pos=(8, 5), flag=wx.TOP | wx.EXPAND)
-        """
+        
         print("Added back after restoration")
         text_field = self.combo.GetValue().encode("utf-8")
         
@@ -4322,18 +4081,19 @@ class Example(wx.Frame):
                 value_test_encoded = value_test.encode("utf-8")
                 symbol_list = value_test_encoded.split(",")
                 print("The Symbol list after the downstream check has been selected", symbol_list)
-            elif self.label_name == "Upstream" and self.cb.GetLabel() == "Default Upstream":
+            elif self.label_name == b"Upstream":
                 value_test_upstream = self.st_up_default_values.GetLabel()
                 print("I AM IN TEST AND THIS IS THE LABEL UPSTREAM>>>", value_test_upstream)   
-                value_test_encoded = value_test_upstream.encode("utf-8")
-                symbol_list = value_test_encoded.split(",")
+                symbol_list = str(value_test_upstream).split(",")
                 print("The Symbol list after the upstream check has been selected", symbol_list)
-                raw_input("WAIT FOR EXAMINATION IN UPSTREAM...")
 
-            if self.label_name == "Upstream":
-                test_python_script_network.func_include_filename(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list, time)
-                test_python_script_network.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list, time)
-    
+            if self.label_name == b"Upstream":
+                #test_python_script_network.func_include_filename(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list, time)
+                #test_python_script_network.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list, time)
+                print("==================================")
+                print("Calling the upstream script.......")
+                print("==================================")
+                sys.exit(0)
             elif self.label_name == "Downstream":
                 downstream_modified_gw_user_pair.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
         #except:
@@ -4411,18 +4171,19 @@ class Example(wx.Frame):
             symbol_list.append(Carrier9)
             symbol_list.append(Carrier10)
 
-            print("THE LENGTH OF THE LIST", symbol_list)
-            raw_input("WAIT FOR EXAMINATION...")
             
             symbol_list = filter(None, symbol_list) 
             print ("The symbol list is", symbol_list)
-            raw_input("WAIT FOR EXAMINATION...")
         
-            if self.label_name == "Upstream":
-                test_python_script_network.func_include_filename(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
-                test_python_script_network.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
-        
-            elif self.label_name == "Downstream":
+            if self.label_name == b"Upstream":
+                #test_python_script_network.func_include_filename(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
+                #test_python_script_network.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
+                print("==================================")
+                print("Calling the upstream script.......")
+                print("==================================")
+                sys.exit(0)
+            
+            elif self.label_name == b"Downstream":
                 downstream_modified_gw_user_pair.main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
 
 
@@ -4437,7 +4198,6 @@ def main():
     try: 
         app = wx.App(clearSigInt=False)
         ex = Example(None, title='LAYER 1 AUTOMATION CONSOLE')
-    
         ex.Show()
         app.MainLoop()
     except KeyboardInterrupt:

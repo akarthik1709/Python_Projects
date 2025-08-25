@@ -18,7 +18,6 @@ import pandas as pd
 from ipywidgets import *
 from IPython.display import display
 #from notebook import display
-from IPython.html import widgets
 from openpyxl import Workbook
 try:
     import openpyxl, platform
@@ -44,7 +43,7 @@ try:
 except ImportError:
     import platform
     platform_test = platform.system()
-    print "I am here", platform_test
+    #print "I am here", platform_test
     #if platform_test == "Windows":
     #    os.system("pip install ssh")
 try:
@@ -83,7 +82,7 @@ def ssh_session(ip, USERNAME, PASSWORD):
         return ssh
     except (paramiko.BadHostKeyException, paramiko.AuthenticationException, \
             paramiko.SSHException, socket.error) as e:
-        print "SSHerror reaching Terminal[{0}]: {1}".format(ip, e)
+        print("SSHerror reaching Terminal[{0}]: {1}".format(ip, e))
         # add error log which says skipping the particular node as it is unreachable
 
 def send_string_and_wait(shell, command, wait_time, should_print):
@@ -98,7 +97,7 @@ def send_string_and_wait(shell, command, wait_time, should_print):
 
     # Print the receive buffer, if necessary
     if should_print:
-        print receive_buffer
+        print(receive_buffer)
 
 def send_string_and_wait_for_string(shell, command, wait_string, should_print):
     # Send the su command
@@ -112,11 +111,11 @@ def send_string_and_wait_for_string(shell, command, wait_string, should_print):
     while not wait_string in receive_buffer:
         # Flush the receive buffer
         receive_buffer += shell.recv(1024)
-        print receive_buffer
+        #print receive_buffer
 
     # Print the receive buffer, if necessary
     if should_print:
-        print receive_buffer
+        print(receive_buffer)
 
 def stdin_write(stdin, command):
     cmd_stdin = command + "\n"
@@ -130,7 +129,7 @@ def telnet_run_command(ip, username, password, port, command, remote=None):
     try:
         ssh = ssh_session(ip, username, password)
     
-        #print "The object type is",    type(ssh)
+        ##print "The object type is",    type(ssh)
 
         import paramiko
     
@@ -149,9 +148,9 @@ def telnet_run_command(ip, username, password, port, command, remote=None):
             # if(cmd == command):
                 # time.sleep(3)
             stdin_write(stdin, cmd)
-        print("I am here before ssh")
+        #print("I am here before ssh")
         ssh.close()
-        print("I am here")
+        #print("I am here")
         return stdout.read()
     
     return "Error reaching node: " + str(ip)
@@ -174,10 +173,10 @@ def get_terminal_did_list(ip, username, password, tpa_port):
     command = "rmt list"
     cmd_output = telnet_run_command(ip, username, password, tpa_port, command)
     cmd_ouput_body = find_command_output_body(cmd_output, command)
-    print("<<<THE COMMAND OUTPUT BODY>>>", cmd_ouput_body)
+    #print("<<<THE COMMAND OUTPUT BODY>>>", cmd_ouput_body)
     
     cmd_ouput_body_split = cmd_ouput_body.splitlines()
-    print("The command output>>>>", cmd_ouput_body_split)
+    #print("The command output>>>>", cmd_ouput_body_split)
 
     term_list = []
     
@@ -189,12 +188,12 @@ def get_terminal_did_list(ip, username, password, tpa_port):
     #term_list_in = term_list_in[term_list_in.find("("): term_list_in.rfind(")")]
 
     #term_list_fi = term_list_in[6:]
-    #print "THE TERMINAL LIST", term_list_in
-    #print "THE TERMINAL LIST", term_list_fi
+    ##print "THE TERMINAL LIST", term_list_in
+    ##print "THE TERMINAL LIST", term_list_fi
     
     #term_list.append(term_list_fi)
 
-    #print("THE TERM LIST>>>", term_list)
+    ##print("THE TERM LIST>>>", term_list)
     
     return term_list
 
@@ -225,11 +224,11 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
         import copy
 
     finally:
-        #print("The value of row", row)
-        print("The set of keys are given by", dictionary_set.keys())
-        print("The set of values are given by", dictionary_set.values())
+        ##print("The value of row", row)
+        #print("The set of keys are given by", dictionary_set.keys())
+        #print("The set of values are given by", dictionary_set.values())
 
-        print("<<<<<THE MODCOD LIST LENGTH IS GIVEN>>>>", modcod_list_length) 
+        #print("<<<<<THE MODCOD LIST LENGTH IS GIVEN>>>>", modcod_list_length) 
         work_s = active_object_state.active
         
         #work_s2 = active_object_state.get_sheet_by_name("Chart")
@@ -247,8 +246,8 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             dictionary_values_set = ''.join(dictionary_set.values()[i])
             dictionary_list_values.append(dictionary_values_set)
         
-        print (dictionary_list_values)
-       # print("COUNTER", counter)
+        #print (dictionary_list_values)
+       # #print("COUNTER", counter)
 
         for n, i in enumerate(dictionary_list_values):
             if i == "":
@@ -256,13 +255,13 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
         for item in range(0, len(dictionary_list_values)-1, 1):
             if dictionary_list_values[item] != "_":
                 dictionary_list_values[item] = int(dictionary_list_values[item])
-                print(type(dictionary_list_values[item]))            
+                #print(type(dictionary_list_values[item]))            
         
-        print (dictionary_list_values) 
+        #print (dictionary_list_values) 
 
         if not dictionary_list_combined:
-            print(type(dictionary_list_combined))
-            print("The contents of the str object", dictionary_list_combined) 
+            #print(type(dictionary_list_combined))
+            #print("The contents of the str object", dictionary_list_combined) 
             dictionary_list_combined.append(dictionary_set.keys())
             dictionary_list_combined.append(dictionary_list_values)
 
@@ -270,11 +269,11 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             dictionary_list_combined.append(dictionary_list_values)
 
 
-        print ("The dictionary list of keys and values", dictionary_list_combined)
+        #print ("The dictionary list of keys and values", dictionary_list_combined)
         
         if cell1.value == None:
             i=0
-            print("I am inside the for loop for the first row execution")
+            #print("I am inside the for loop for the first row execution")
             #raw_input("BEFORE THE FOR LOOP FIRST ROW EXECUTION....")
             for key in range(1, 34):
                 #work_s['A%s' %(i)] = cmd_input_for_excel 
@@ -283,7 +282,7 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
                 i+=1
 
         if not cell1.value == None:
-            print("I am here when cell value is not none")
+            #print("I am here when cell value is not none")
             """
             for n, i in enumerate(dictionary_list_values):
             if i == "":
@@ -291,20 +290,20 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             for item in range(0, len(dictionary_list_values)-1, 1):
             if dictionary_list_values[item] != "_":
                 dictionary_list_values[item] = int(dictionary_list_values[item])
-                print(type(dictionary_list_values[item]))            
+                #print(type(dictionary_list_values[item]))            
         
-            print (dictionary_list_values) 
+            #print (dictionary_list_values) 
             """
             
-            print("j when 0 : ", dictionary_list_values[0])
-            print("j when checked for last element : ", dictionary_list_values[-1])
+            #print("j when 0 : ", dictionary_list_values[0])
+            #print("j when checked for last element : ", dictionary_list_values[-1])
             j=0
         #for row_counter in range(0, len(dictionary_list_values)-1, 1):
             if dictionary_list_values.count("_") == 33:
                 del dictionary_list_values
      
             else:
-                print("row value before the for loop", row1)
+                #print("row value before the for loop", row1)
                 #raw_input("IN ELSE BEFORE FOR....")
                 row1+=1
                 for col in range(1, 34):
@@ -312,7 +311,7 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
                     cell_ref_col.value = dictionary_list_values[j]
                     j+=1
             #row1+=1
-                print("row value after the for loop for col is :", row1)
+                #print("row value after the for loop for col is :", row1)
                 #raw_input("ROW IN ELSE.....")
                 
             #   work_s1.append(j)
@@ -544,14 +543,14 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             row_counter_data = 1
             row_counter_squared = 1
             for row in work_s.get_squared_range(min_col=chart, min_row=1, max_col=chart, max_row=modcod_list_length+1):
-                print("ROW SQUARED DATA>>>>", row_counter_squared)
+                #print("ROW SQUARED DATA>>>>", row_counter_squared)
                 for cell in row:
-                    #print "The element given is", row[cell]
+                    ##print "The element given is", row[cell]
                     #row[cell] = row[cell].encode("utf-8")
-                    print("THE ROW COUNTER DATA", row_counter_data)
+                    #print("THE ROW COUNTER DATA", row_counter_data)
                     row_counter_data+=1
                     elim_zero_value_list.append(cell.value)
-                    print("THE ELIM ZERO VALUE LIST", elim_zero_value_list)
+                    #print("THE ELIM ZERO VALUE LIST", elim_zero_value_list)
 
             
 
@@ -630,10 +629,10 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
                 work_s2.add_chart(c, "A160")
             """
         #new_elim_list = np.array(final_value_list)
-        #print "This is the elimated zero value list elim list", new_elim_list
+        ##print "This is the elimated zero value list elim list", new_elim_list
             ##raw_input("THE ARRAY IS??>>>>>..")
             #new_elim_list_test = new_elim_list.reshape(33, 11)
-        #print("THE LIST WITH 2D to 1D is", new_elim_list)
+        ##print("THE LIST WITH 2D to 1D is", new_elim_list)
             
            
          
@@ -642,10 +641,10 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
 
 
 
-        #print("THE LIST AFTER RESHAPE", new_elim_list_test)  
-        print("THE LIST BEFORE TH SYMBOL LIST", final_value_list)
+        ##print("THE LIST AFTER RESHAPE", new_elim_list_test)  
+        #print("THE LIST BEFORE TH SYMBOL LIST", final_value_list)
         new_elim_list1 = np.array(final_value_list)
-        #print "This is the elimated zero value list elim list", new_elim_list
+        ##print "This is the elimated zero value list elim list", new_elim_list
         ##raw_input("THE ARRAY IS??>>>>>..")
         new_elim_list_test = new_elim_list1.reshape(-1, 11)
         #new_elim_list_test = final_value_list.reshape(33, 11)
@@ -653,9 +652,9 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
         ByteTotal_Mode_qpsk_1_4.append(new_elim_list_test[0])
         #ByteTotal_Mode_8psk_2_3.append(new_elim_list_test[12])
 
-        #print("I AM HERE ELIM>>>", new_elim_list[0][1]) 
-        #print("I AM HERE ELIM>>>", new_elim_list[0][2]) 
-        #print("I AM HERE ELIM>>>", new_elim_list[0][3]) 
+        ##print("I AM HERE ELIM>>>", new_elim_list[0][1]) 
+        ##print("I AM HERE ELIM>>>", new_elim_list[0][2]) 
+        ##print("I AM HERE ELIM>>>", new_elim_list[0][3]) 
         
         ByteTotal_Mode_qpsk_1_3.append(new_elim_list_test[1])
         ByteTotal_Mode_qpsk_2_5.append(new_elim_list_test[2])
@@ -696,210 +695,210 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
         ByteTotal_Mode_qpsk_1_4 = np.array(ByteTotal_Mode_qpsk_1_4)
         ByteTotal_Mode_qpsk_1_4 = ByteTotal_Mode_qpsk_1_4.ravel()
         ByteTotal_Mode_qpsk_1_4 = ByteTotal_Mode_qpsk_1_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_1_3 = np.array(ByteTotal_Mode_qpsk_1_3)
         ByteTotal_Mode_qpsk_1_3 = ByteTotal_Mode_qpsk_1_3.ravel()
         ByteTotal_Mode_qpsk_1_3 = ByteTotal_Mode_qpsk_1_3.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_3)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_3)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_2_5 = np.array(ByteTotal_Mode_qpsk_2_5)
         ByteTotal_Mode_qpsk_2_5 = ByteTotal_Mode_qpsk_2_5.ravel()
         ByteTotal_Mode_qpsk_2_5 = ByteTotal_Mode_qpsk_2_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_2_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_2_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_1_2 = np.array(ByteTotal_Mode_qpsk_1_2)
         ByteTotal_Mode_qpsk_1_2 = ByteTotal_Mode_qpsk_1_2.ravel()
         ByteTotal_Mode_qpsk_1_2 = ByteTotal_Mode_qpsk_1_2.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_2)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_2)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_3_5 = np.array(ByteTotal_Mode_qpsk_3_5)
         ByteTotal_Mode_qpsk_3_5 = ByteTotal_Mode_qpsk_3_5.ravel()
         ByteTotal_Mode_qpsk_3_5 = ByteTotal_Mode_qpsk_3_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_3_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_3_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_2_3 = np.array(ByteTotal_Mode_qpsk_2_3)
         ByteTotal_Mode_qpsk_2_3 = ByteTotal_Mode_qpsk_2_3.ravel()
         ByteTotal_Mode_qpsk_2_3 = ByteTotal_Mode_qpsk_2_3.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_2_3)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_2_3)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_3_4 = np.array(ByteTotal_Mode_qpsk_3_4)
         ByteTotal_Mode_qpsk_3_4 = ByteTotal_Mode_qpsk_3_4.ravel()
         ByteTotal_Mode_qpsk_3_4 = ByteTotal_Mode_qpsk_3_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_3_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_3_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_4_5 = np.array(ByteTotal_Mode_qpsk_4_5)
         ByteTotal_Mode_qpsk_4_5 = ByteTotal_Mode_qpsk_4_5.ravel()
         ByteTotal_Mode_qpsk_4_5 = ByteTotal_Mode_qpsk_4_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_4_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_4_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_5_6 = np.array(ByteTotal_Mode_qpsk_5_6)
         ByteTotal_Mode_qpsk_5_6 = ByteTotal_Mode_qpsk_5_6.ravel()
         ByteTotal_Mode_qpsk_5_6 = ByteTotal_Mode_qpsk_5_6.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_5_6)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_5_6)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_8_9 = np.array(ByteTotal_Mode_qpsk_8_9)
         ByteTotal_Mode_qpsk_8_9 = ByteTotal_Mode_qpsk_8_9.ravel()
         ByteTotal_Mode_qpsk_8_9 = ByteTotal_Mode_qpsk_8_9.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_8_9)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_8_9)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_1_4 = np.array(ByteTotal_Mode_qpsk_1_4)
         ByteTotal_Mode_qpsk_1_4 = ByteTotal_Mode_qpsk_1_4.ravel()
         ByteTotal_Mode_qpsk_1_4 = ByteTotal_Mode_qpsk_1_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_qpsk_9_10 = np.array(ByteTotal_Mode_qpsk_9_10)
         ByteTotal_Mode_qpsk_9_10 = ByteTotal_Mode_qpsk_9_10.ravel()
         ByteTotal_Mode_qpsk_9_10 = ByteTotal_Mode_qpsk_9_10.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_9_10)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_9_10)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_3_5 = np.array(ByteTotal_Mode_8psk_3_5)
         ByteTotal_Mode_8psk_3_5 = ByteTotal_Mode_8psk_3_5.ravel()
         ByteTotal_Mode_8psk_3_5 = ByteTotal_Mode_8psk_3_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_3_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_3_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_2_3 = np.array(ByteTotal_Mode_8psk_2_3)
         ByteTotal_Mode_8psk_2_3 = ByteTotal_Mode_8psk_2_3.ravel()
         ByteTotal_Mode_8psk_2_3 = ByteTotal_Mode_8psk_2_3.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_2_3)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_2_3)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_3_4 = np.array(ByteTotal_Mode_8psk_3_4)
         ByteTotal_Mode_8psk_3_4 = ByteTotal_Mode_8psk_3_4.ravel()
         ByteTotal_Mode_8psk_3_4 = ByteTotal_Mode_8psk_3_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_3_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_3_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_5_6 = np.array(ByteTotal_Mode_8psk_5_6)
         ByteTotal_Mode_8psk_5_6 = ByteTotal_Mode_8psk_5_6.ravel()
         ByteTotal_Mode_8psk_5_6 = ByteTotal_Mode_8psk_5_6.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_5_6)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_5_6)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_8_9 = np.array(ByteTotal_Mode_8psk_8_9)
         ByteTotal_Mode_8psk_8_9 = ByteTotal_Mode_8psk_8_9.ravel()
         ByteTotal_Mode_8psk_8_9 = ByteTotal_Mode_8psk_8_9.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_8_9)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_8_9)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_8psk_9_10 = np.array(ByteTotal_Mode_8psk_9_10)
         ByteTotal_Mode_8psk_9_10 = ByteTotal_Mode_8psk_9_10.ravel()
         ByteTotal_Mode_8psk_9_10 = ByteTotal_Mode_8psk_9_10.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_8psk_9_10)
+        #print("The array in 1 and 3", ByteTotal_Mode_8psk_9_10)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_2_3 = np.array(ByteTotal_Mode_16apsk_2_3)
         ByteTotal_Mode_16apsk_2_3 = ByteTotal_Mode_16apsk_2_3.ravel()
         ByteTotal_Mode_16apsk_2_3 = ByteTotal_Mode_16apsk_2_3.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_2_3)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_2_3)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_3_4 = np.array(ByteTotal_Mode_16apsk_3_4)
         ByteTotal_Mode_16apsk_3_4 = ByteTotal_Mode_16apsk_3_4.ravel()
         ByteTotal_Mode_16apsk_3_4 = ByteTotal_Mode_16apsk_3_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_3_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_3_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_4_5 = np.array(ByteTotal_Mode_16apsk_4_5)
         ByteTotal_Mode_16apsk_4_5 = ByteTotal_Mode_16apsk_4_5.ravel()
         ByteTotal_Mode_16apsk_4_5 = ByteTotal_Mode_16apsk_4_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_4_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_4_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_5_6 = np.array(ByteTotal_Mode_16apsk_5_6)
         ByteTotal_Mode_16apsk_5_6 = ByteTotal_Mode_16apsk_5_6.ravel()
         ByteTotal_Mode_16apsk_5_6 = ByteTotal_Mode_16apsk_5_6.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_5_6)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_5_6)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_8_9 = np.array(ByteTotal_Mode_16apsk_8_9)
         ByteTotal_Mode_16apsk_8_9 = ByteTotal_Mode_16apsk_8_9.ravel()
         ByteTotal_Mode_16apsk_8_9 = ByteTotal_Mode_16apsk_8_9.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_8_9)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_8_9)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_16apsk_9_10 = np.array(ByteTotal_Mode_16apsk_9_10)
         ByteTotal_Mode_16apsk_9_10 = ByteTotal_Mode_16apsk_9_10.ravel()
         ByteTotal_Mode_16apsk_9_10 = ByteTotal_Mode_16apsk_9_10.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_16apsk_9_10)
+        #print("The array in 1 and 3", ByteTotal_Mode_16apsk_9_10)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_32apsk_3_4 = np.array(ByteTotal_Mode_32apsk_3_4)
         ByteTotal_Mode_32apsk_3_4 = ByteTotal_Mode_32apsk_3_4.ravel()
         ByteTotal_Mode_32apsk_3_4 = ByteTotal_Mode_32apsk_3_4.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_32apsk_3_4)
+        #print("The array in 1 and 3", ByteTotal_Mode_32apsk_3_4)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_32apsk_4_5 = np.array(ByteTotal_Mode_32apsk_4_5)
         ByteTotal_Mode_32apsk_4_5 = ByteTotal_Mode_32apsk_4_5.ravel()
         ByteTotal_Mode_32apsk_4_5 = ByteTotal_Mode_32apsk_4_5.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_32apsk_4_5)
+        #print("The array in 1 and 3", ByteTotal_Mode_32apsk_4_5)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_32apsk_5_6 = np.array(ByteTotal_Mode_32apsk_5_6)
         ByteTotal_Mode_32apsk_5_6 = ByteTotal_Mode_32apsk_5_6.ravel()
         ByteTotal_Mode_32apsk_5_6 = ByteTotal_Mode_32apsk_5_6.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_32apsk_5_6)
+        #print("The array in 1 and 3", ByteTotal_Mode_32apsk_5_6)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_32apsk_8_9 = np.array(ByteTotal_Mode_32apsk_8_9)
         ByteTotal_Mode_32apsk_8_9 = ByteTotal_Mode_32apsk_8_9.ravel()
         ByteTotal_Mode_32apsk_8_9 = ByteTotal_Mode_32apsk_8_9.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_32apsk_8_9)
+        #print("The array in 1 and 3", ByteTotal_Mode_32apsk_8_9)
         #raw_input("THE BYTEMODEQPSK...")
 
         ByteTotal_Mode_32apsk_9_10 = np.array(ByteTotal_Mode_32apsk_9_10)
         ByteTotal_Mode_32apsk_9_10 = ByteTotal_Mode_32apsk_9_10.ravel()
         ByteTotal_Mode_32apsk_9_10 = ByteTotal_Mode_32apsk_9_10.tolist()
-        print("The array in 1 and 3", ByteTotal_Mode_32apsk_9_10)
+        #print("The array in 1 and 3", ByteTotal_Mode_32apsk_9_10)
         #raw_input("THE BYTEMODEQPSK...")
 
         bBFrameCount = np.array(bBFrameCount)
         bBFrameCount = bBFrameCount.ravel()
         bBFrameCount = bBFrameCount.tolist()
-        print("The array in 1 and 3", bBFrameCount)
+        #print("The array in 1 and 3", bBFrameCount)
         #raw_input("THE BYTEMODEQPSK...")
 
         legsTotalCount = np.array(legsTotalCount)
         legsTotalCount = legsTotalCount.ravel()
         legsTotalCount = legsTotalCount.tolist()
-        print("The array in 1 and 3", legsTotalCount)
+        #print("The array in 1 and 3", legsTotalCount)
         #raw_input("THE BYTEMODEQPSK...")
 
         legsPacketCount = np.array(legsPacketCount)
         legsPacketCount = legsPacketCount.ravel()
         legsPacketCount = legsPacketCount.tolist()
-        print("The array in 1 and 3", legsPacketCount)
+        #print("The array in 1 and 3", legsPacketCount)
         #raw_input("THE BYTEMODEQPSK...")
 
         fastFadeCount = np.array(fastFadeCount)
         fastFadeCount = fastFadeCount.ravel()
         fastFadeCount = fastFadeCount.tolist()
-        print("The array in 1 and 3", fastFadeCount)
+        #print("The array in 1 and 3", fastFadeCount)
         #raw_input("THE BYTEMODEQPSK...")
         
         modCodChangeCount = np.array(modCodChangeCount)
         modCodChangeCount = modCodChangeCount.ravel()
         modCodChangeCount = modCodChangeCount.tolist()
-        print("The array in 1 and 3", modCodChangeCount)
+        #print("The array in 1 and 3", modCodChangeCount)
         #raw_input("THE BYTEMODEQPSK...")
 
 
-        print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_3)
-        print("The array in 8 for 2 and 3", ByteTotal_Mode_8psk_2_3)
+        #print("The array in 1 and 3", ByteTotal_Mode_qpsk_1_3)
+        #print("The array in 8 for 2 and 3", ByteTotal_Mode_8psk_2_3)
         ##raw_input("BYTE 1 3...")
         
         for chrt in range(1, 34):
@@ -914,7 +913,7 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             c.x_axis.unit = 1
             #c.y_axis.scaling.max = 70000
             data = Reference(work_s, min_col=chrt, min_row=1, max_col=chrt, max_row=modcod_list_length+1)
-            print ("THE DATA IS>>>>", data)
+            #print ("THE DATA IS>>>>", data)
             c.add_data(data, titles_from_data=True)
             if chrt == 1 and ByteTotal_Mode_qpsk_1_4.count("_")!=row1-1:
                 work_s2.add_chart(c, "A2")
@@ -983,7 +982,7 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
             if chrt ==33 and modCodChangeCount.count("_")!=row1-1: 
                 work_s2.add_chart(c, "A160")
 
-        print("AFTER RESHAPING", new_elim_list_test)
+        #print("AFTER RESHAPING", new_elim_list_test)
         Symbol_string = ','.join(str(x) for x in SYMBOLS)
         work_s2["A1"] = "The Symbols which are being iterated through are = %s" %(Symbol_string)
         
@@ -991,7 +990,7 @@ def excel_sheet_generation(dictionary_set, dictionary_list_combined, Number_coun
 #           work_s2.add_chart(c, "A2") 
                     
             
-        print("The row is given by", row1)
+        #print("The row is given by", row1)
         test_work = os.path.expanduser('~\\Downstream_Excel.xlsx')
         
         Number_counter+=1
@@ -1015,11 +1014,11 @@ global counter
 def func_contain_excel_generation(dictionary_test, dictionary_list_combined, Number_counter, carrier, gw, u_freq, modcod_list_length, modcod, enumerate_list, work_s2, active_object_state, sheet_name, fec_final_rate, fec_rate_bpsk_list,fec_rate_8psk_list,fec_rate_qpsk_list, symbols, direction="downstream"):
     work_book_name = "c:\\Users\\akarthik\\Downloads\\Upstream_Excel_File.xlsx"
     if os.path.exists(work_book_name):
-        print "The workbook is given by"
-        print("The dictionary list combined is given by", dictionary_list_combined)
+        #print "The workbook is given by"
+        #print("The dictionary list combined is given by", dictionary_list_combined)
         
         if direction == "upstream":
-            print(" I AM IN EXCEL SHEET FOR UPSTREAM>>>>")
+            #print(" I AM IN EXCEL SHEET FOR UPSTREAM>>>>")
             
 
             test_python_script_network.excel_sheet_generation(dictionary_test, dictionary_list_combined, Number_counter, carrier, gw, u_freq, modcod_list_length, modcod, enumerate_list, work_book_name, work_s2, active_object_state, sheet_name, fec_final_rate, fec_rate_bpsk_list,fec_rate_8psk_list,fec_rate_qpsk_list, symbols) 
@@ -1030,8 +1029,8 @@ def func_contain_excel_generation(dictionary_test, dictionary_list_combined, Num
 def func_contain_excel_generation_downstream(dictionary_test, dictionary_list_combined, Number_counter, carrier, gw, u_freq, modcod_list_length, active_object_state, work_s2, SYMBOLS):
     work_book_name = os.path.expanduser('~\\Downstream_Excel.xlsx')
     if os.path.exists(work_book_name):
-        print "The workbook is given by"
-        print("The dictionary list combined is given by", dictionary_list_combined)
+        #print "The workbook is given by"
+        #print("The dictionary list combined is given by", dictionary_list_combined)
         
         excel_sheet_generation(dictionary_test, dictionary_list_combined, Number_counter, carrier, gw, u_freq, modcod_list_length, active_object_state, work_s2, SYMBOLS)
          
@@ -1090,69 +1089,69 @@ def run_pp_commands(ip, username, password, tpa_port, work_b, dictionary_test, d
 
     Number_counter = 1     
     for term in terminal_list:
-        print("<<<INSIDE TERMINAL LIST FOR LOOP>>")
+        #print("<<<INSIDE TERMINAL LIST FOR LOOP>>")
         cmd_output = telnet_run_command(ip, username, password, tpa_port, "modcod", term)
-        # print find_command_output_body(cmd_output, "modcod") + "\n"
-        print cmd_output + "\n"
+        # #print find_command_output_body(cmd_output, "modcod") + "\n"
+        #print cmd_output + "\n"
         # write_access_log(ip, "modcod", cmd_ouput)
 
         cmd_output = telnet_run_command(ip, username, password, tpa_port, "dvbs2rmt snr", term)
-        print find_command_output_body(cmd_output, "dvbs2rmt snr") + "\n"
+        #print find_command_output_body(cmd_output, "dvbs2rmt snr") + "\n"
         # write_access_log(ip, "dvbs2rmt snr", cmd_ouput)
 
         cmd_output = telnet_run_command(ip, username, password, tpa_port, "dvbs2rmt stats", term)
-        print "The command output for the dvbs2rmt stats \n", cmd_output
-        print type(cmd_output)
+        #print "The command output for the dvbs2rmt stats \n", cmd_output
+        #print type(cmd_output)
         sys.stdout.flush()
 
         cmd_output_section = cmd_output[cmd_output.find("ByteTotal_Mode_qpsk_1_4"): cmd_output.rfind("admin@telnet") + 1]
-        print "Command output section \n", cmd_output_section
+        #print "Command output section \n", cmd_output_section
         
         
-        print("cmd after flush", cmd_output_section)
+        #print("cmd after flush", cmd_output_section)
 
        
         cmd_output_array.append(cmd_output_section)
-        print "The command output array is ", cmd_output_array
+        #print "The command output array is ", cmd_output_array
 
         if not cmd_output_array[-1]:
             cmd_output_array.pop(-1)
 
         #cmd_output_array = list(cmd_output_array)
         
-        #print "list is given by", cmd_output_array
+        ##print "list is given by", cmd_output_array
 
         cmd_output_array_Text1 = cmd_output_array[-1].split("\r\n")
 
-        print "The cmd_output after split", cmd_output_array_Text1
+        #print "The cmd_output after split", cmd_output_array_Text1
 
         cmd_output_array_Text1.pop(-1)
         if not cmd_output_array_Text1[-1]:
             cmd_output_array_Text1.pop(-1)
         
-        print "The array after pop", cmd_output_array_Text1
+        #print "The array after pop", cmd_output_array_Text1
         
         for elements_sep in range(0, len(cmd_output_array_Text1), 1):
             cmd_output_array_Text1_after_split = cmd_output_array_Text1[elements_sep].split(" = ")
-            print "output array", cmd_output_array_Text1_after_split
+            #print "output array", cmd_output_array_Text1_after_split
             list_to_have_seperated_values.append(cmd_output_array_Text1_after_split)
         
-        print list_to_have_seperated_values
+        #print list_to_have_seperated_values
         
         for i in range(0, len(list_to_have_seperated_values)-1, 1):
             dictionary_test_final[list_to_have_seperated_values[i][0]] = list_to_have_seperated_values[i][1]
         
-        print "The dictionary which contains the keys and values", dictionary_test
+        #print "The dictionary which contains the keys and values", dictionary_test
 
         for key in list(dictionary_test_final.keys()):
             if dictionary_test_final[key] == "0":
                 #dictionary_test.pop(value)
                 del dictionary_test_final[key]
 
-        print "The dictionary after the key value has been popped", dictionary_test
-        print " I am here after the dict values have been popped"
-        #print "The list of bytes present", list_bytes
-        #print "The list of values present", list_values
+        #print "The dictionary after the key value has been popped", dictionary_test
+        #print " I am here after the dict values have been popped"
+        ##print "The list of bytes present", list_bytes
+        ##print "The list of values present", list_values
         """
         for i in range(0, len(list_values), 1):
             if list_values[i] == "0":
@@ -1164,37 +1163,37 @@ def run_pp_commands(ip, username, password, tpa_port, work_b, dictionary_test, d
     
         if "ByteTotal_Mode_qpsk_1_4" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_1_4"].append(dictionary_test_final["ByteTotal_Mode_qpsk_1_4"])
-            print("The dictionary_test1", dictionary_test)
+            #print("The dictionary_test1", dictionary_test)
             #work_sheet_object_excel1 = func_contain_excel_generation(dictionary_test["ByteTotal_Mode_qpsk_1_4"])
         
         if "ByteTotal_Mode_qpsk_1_3" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_1_3"].append(dictionary_test_final["ByteTotal_Mode_qpsk_1_3"])
-            print("The dictionary_test2", dictionary_test)
+            #print("The dictionary_test2", dictionary_test)
             #work_sheet_object_excel2 = func_contain_excel_generation(dictionary_test["ByteTotal_Mode_qpsk_1_3"])
 
         if "ByteTotal_Mode_qpsk_2_5" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_2_5"].append(dictionary_test_final["ByteTotal_Mode_qpsk_2_5"])
-            print("The dictionary_test3", dictionary_test)
+            #print("The dictionary_test3", dictionary_test)
         
         if "ByteTotal_Mode_qpsk_1_2" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_1_2"].append(dictionary_test_final["ByteTotal_Mode_qpsk_1_2"])
-            print("The dictionary_test4", dictionary_test)
+            #print("The dictionary_test4", dictionary_test)
 
         if "ByteTotal_Mode_qpsk_3_5" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_3_5"].append(dictionary_test_final["ByteTotal_Mode_qpsk_3_5"])
-            print("The dictionary_test5", dictionary_test)
+            #print("The dictionary_test5", dictionary_test)
         
         if "ByteTotal_Mode_qpsk_2_3" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_2_3"].append(dictionary_test_final["ByteTotal_Mode_qpsk_2_3"])
-            print("The dictionary_test6", dictionary_test)
+            #print("The dictionary_test6", dictionary_test)
 
         if "ByteTotal_Mode_qpsk_3_4" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_3_4"].append(dictionary_test_final["ByteTotal_Mode_qpsk_3_4"])
-            print("The dictionary_test7", dictionary_test)
+            #print("The dictionary_test7", dictionary_test)
 
         if "ByteTotal_Mode_qpsk_4_5" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_4_5"].append(dictionary_test_final["ByteTotal_Mode_qpsk_4_5"])
-            print("The dictionary_test8", dictionary_test)
+            #print("The dictionary_test8", dictionary_test)
 
         if "ByteTotal_Mode_qpsk_5_6" in dictionary_test_final.keys():
             dictionary_test["ByteTotal_Mode_qpsk_5_6"].append(dictionary_test_final["ByteTotal_Mode_qpsk_5_6"])
@@ -1263,23 +1262,23 @@ def run_pp_commands(ip, username, password, tpa_port, work_b, dictionary_test, d
         
             #list_values_test.append(list_values)
 
-        print dictionary_test.keys()
-        print dictionary_test.values() 
-        print "Bytes list sent", list_bytes_test_new
-        print "Bytes values sent", list_values_test_new
-        print "The keys in the list are given by", list_bytes
-        print "The list After the 0 values are removed", list_values
+        #print dictionary_test.keys()
+        #print dictionary_test.values() 
+        #print "Bytes list sent", list_bytes_test_new
+        #print "Bytes values sent", list_values_test_new
+        #print "The keys in the list are given by", list_bytes
+        #print "The list After the 0 values are removed", list_values
 
         """
         work_book_name = "c:\\Users\\akarthik\\Downloads\\Downstream_Excel.xlsx"
         if os.path.exists(work_book_name):
-            print "The workbook is given by"
+            #print "The workbook is given by"
             active_object_state = openpyxl.load_workbook(work_book_name)
            # for key,value in kwargs.iteritems():
             excel_sheet_generation(dictionary_test, active_object_state, work_book_name)
         """
 
-        print("the dictionary is given as follows", dictionary_test)
+        #print("the dictionary is given as follows", dictionary_test)
 
         func_contain_excel_generation_downstream(dictionary_test, dictionary_list_combined, Number_counter, carrier, gw, u_freq, modcod_list_length, active_object_state, work_s2, SYMBOLS) 
 
@@ -1290,7 +1289,7 @@ def run_pp_commands(ip, username, password, tpa_port, work_b, dictionary_test, d
             #    cmd_output_array_Text1[elements_sep].strip(" = ")
             #    list_seperation_for_elements.append(cmd_output_array_Text1[elements_sep])
 
-        #print "The list after striping the required pattern", list_seperation_for_elements 
+        ##print "The list after striping the required pattern", list_seperation_for_elements 
 
 
 
@@ -1299,13 +1298,13 @@ def run_pp_commands(ip, username, password, tpa_port, work_b, dictionary_test, d
             if "\n" in cmd_output_array_Text1[count]:
                 cmd_output_array_Text1[count].strip("\n")
         """
-        print cmd_output_array_Text1
+        #print cmd_output_array_Text1
 
-        print type(list_bytes)
-        print type(list_values)
+        #print type(list_bytes)
+        #print type(list_values)
 
-        #print ("The TEST_OBJ RETURN VALUE", test_obj)
-        print find_command_output_body(cmd_output, "dvbs2rmt stats") + "\n"
+        ##print ("The TEST_OBJ RETURN VALUE", test_obj)
+        #print find_command_output_body(cmd_output, "dvbs2rmt stats") + "\n"
         # write_access_log(ip, "dvbs2rmt stats", cmd_ouput)
     
     return terminal_list, dictionary_test
@@ -1322,36 +1321,36 @@ def reset_terminal_stats(ip, username, password):
 
 def get_terminal_stats(ip, username, password):  
     cmd_output = telnet_run_command(ip, username, password, "", "rx griffin stats")
-    print cmd_output
-    # print find_command_output_body(cmd_output, "rx griffin stats") + "\n"
+    #print cmd_output
+    # #print find_command_output_body(cmd_output, "rx griffin stats") + "\n"
 
 """Set of functions which execute the change the user frequency, gw frequency, symbol rate, maxmodcod"""
 def exec_func_requests_maxmod(api_uri, headers, ip, username, password, maxmodcod_value, carrier_id):
     import requests 
     maxmodcod_change = requests.patch(api_uri, data=json.dumps({"maxmodcod": maxmodcod_value}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-    print "<<<<THE MAXMODCODCHANGE>>>", maxmodcod_change
+    #print "<<<<THE MAXMODCODCHANGE>>>", maxmodcod_change
 
-#    print "Modcod Changed [IP: " + str(ip) + "| TerminalType: " + str(carrier_id) + "]: " + str(maxmodcod_change.json()['data']['obj_attributes']['maxmodcod'])
+#    #print "Modcod Changed [IP: " + str(ip) + "| TerminalType: " + str(carrier_id) + "]: " + str(maxmodcod_change.json()['data']['obj_attributes']['maxmodcod'])
 
     return maxmodcod_change
 
 def exec_change_user_frequency(user_frequency, headers, ip, username, password, channel_id, api_uri):
     import requests 
     user_freq_change = requests.patch(api_uri, data=json.dumps({"fwdbandwidth": "54" , "fwduserfrequency": user_frequency}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-#    print "User Frequency Changed [IP: " + str(ip) + "| Channel: " + str(channel_id) + "]: " + str(user_freq_change.json()['data']['obj_attributes']['fwduserfrequency'])
+#    #print "User Frequency Changed [IP: " + str(ip) + "| Channel: " + str(channel_id) + "]: " + str(user_freq_change.json()['data']['obj_attributes']['fwduserfrequency'])
 
     return user_freq_change
 
 def exec_change_gw_frequency(gw_frequency, headers, ip, username, password, channel_id, api_uri):
     import requests 
     gw_freq_change = requests.patch(api_uri, data=json.dumps({"fwdbandwidth": "54", "fwdgatewayfrequency": gw_frequency}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-    print "THE JSON OUTPUT", gw_freq_change.json()
-#    print "GW Frequency Changed [IP: " + str(ip) + "| Channel: " + str(channel_id) + "]: " + str(gw_freq_change.json()['data']['obj_attributes']['fwdgatewayfrequency']) 
+    #print "THE JSON OUTPUT", gw_freq_change.json()
+#    #print "GW Frequency Changed [IP: " + str(ip) + "| Channel: " + str(channel_id) + "]: " + str(gw_freq_change.json()['data']['obj_attributes']['fwdgatewayfrequency']) 
 
 def exec_change_symbol_rate(sym_rate, headers, ip, carrier_id, username, password, api_uri):
     import requests 
     symrate_change = requests.patch(api_uri, data=json.dumps({"symbolrate": sym_rate}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
- #   print "SymbolRate Changed [IP: " + str(ip) + "| Carrier: " + str(carrier_id) + "]: " + str(symrate_change.json()['data']['obj_attributes']['symbolrate'])
+ #   #print "SymbolRate Changed [IP: " + str(ip) + "| Carrier: " + str(carrier_id) + "]: " + str(symrate_change.json()['data']['obj_attributes']['symbolrate'])
 
 
 
@@ -1359,7 +1358,7 @@ def change_maxmodcod(ip, username, password, carrier_id, maxmodcod_value):
     API = "api/1.0/config/element/terminaltype"
     headers =  {"Content-Type":"application/json"}
     api_uri = 'http://{api_endpoint}/{nms_api}/{obj_id}'.format(api_endpoint=ip, nms_api=API, obj_id=carrier_id)
-    print "The contents of", api_uri
+    #print "The contents of", api_uri
 
     exec_func_requests_maxmod(api_uri, headers, ip, username, password, maxmodcod_value, carrier_id)     
     
@@ -1377,7 +1376,7 @@ def change_user_frequency(ip, username, password, channel_id, user_frequency):
     except:
         exec_change_user_frequency(user_frequency, headers, ip, username, password, channel_id, api_uri)     
 
-    # print user_freq_change.content
+    # #print user_freq_change.content
     # write_access_log(ip, "NMS : change modcod ", str(maxmodcod_change.content))
 
 def change_gw_frequency(ip, username, password, channel_id, gw_frequency):
@@ -1386,14 +1385,14 @@ def change_gw_frequency(ip, username, password, channel_id, gw_frequency):
   #  headers = requests.
     headers =  {"Content-Type":"application/json"}
     api_uri = 'http://{api_endpoint}/{nms_api}/{obj_id}'.format(api_endpoint=ip, nms_api=API, obj_id=channel_id)
-    print "THE API URI IS", api_uri
+    #print "THE API URI IS", api_uri
     try:
         exec_change_gw_frequency(gw_frequency, headers, ip, username, password, channel_id, api_uri)
     except:
         exec_change_gw_frequency(gw_frequency, headers, ip, username, password, channel_id, api_uri)
 
     
-    # print gw_freq_change.content
+    # #print gw_freq_change.content
     # write_access_log(ip, "NMS : change modcod ", str(maxmodcod_change.content))
 
 
@@ -1405,38 +1404,38 @@ def change_symbol_rate(ip, username, password, carrier_id, sym_rate):
     exec_change_symbol_rate(sym_rate, headers, ip, carrier_id,  username, password, api_uri)
     
 
-    # print symrate_change.content
+    # #print symrate_change.content
     # write_access_log(ip, "NMS : change modcod ", str(maxmodcod_change.content))
 
 def apply_changes(ip, username, password, object_id):
     API = "api/1.0/config/element"
-    print ("<<<<<THE OBJECT ID>>>", object_id)
+    #print ("<<<<<THE OBJECT ID>>>", object_id)
     headers =  {"Content-Type":"application/json"}
     api_uri = 'http://{api_endpoint}/{nms_api}/{obj_id}/apply_changes'.format(api_endpoint=ip, nms_api=API, obj_id=object_id)
     try:
         apply_change = requests.post(api_uri, data=json.dumps({}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-        print "The change for the json", apply_change
+        #print "The change for the json", apply_change
     except:
         #os.system("pip install requests")
         import requests
     finally:
         apply_change = requests.post(api_uri, data=json.dumps({}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-        print "The change for the json", apply_change
+        #print "The change for the json", apply_change
     #except:
     #    import platform
     #    platform_apply_changes = platform.system()
     #    if (platform_apply_changes == "Linux"):
     #        apply_change_test = requests.post(api_uri, data=json.dumps({}), headers=headers, params=None, auth=HTTPBasicAuth(username, password))
 
-    # print "Config Status: " + str(apply_change.json()['code']) 
-    # print apply_change.content
+    # #print "Config Status: " + str(apply_change.json()['code']) 
+    # #print apply_change.content
 
 def default_maxmodcod(ip, username, password):
     default_termtype = {}
     API = "api/1.0/config/element/downstreamcarrier"
     headers =  {"Content-Type":"application/json"}
     api_uri = 'http://{api_endpoint}/{nms_api}'.format(api_endpoint=ip, nms_api=API)
-    print "API URI", api_uri
+    #print "API URI", api_uri
     try:
         termtype_info = requests.get(api_uri, data=None, headers=headers, params=None, auth=HTTPBasicAuth(username, password))
         for dtype in termtype_info.json()['data']:
@@ -1448,7 +1447,7 @@ def default_maxmodcod(ip, username, password):
         import requests
     finally:
         termtype_info = requests.get(api_uri, data=None, headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-        print "I AM IN TERMTYPE INFO..", termtype_info
+        #print "I AM IN TERMTYPE INFO..", termtype_info
         for dtype in termtype_info.json()['data']:
             if len(str(dtype['obj_attributes']['minmodcod'])) > 1:
                 default_termtype[dtype['obj_id']] = dtype['obj_attributes']['minmodcod'] 
@@ -1472,7 +1471,7 @@ def get_terminal_list(ip, username, password):
         terminal_info = requests.get(api_uri, data=None, headers=headers, params=None, auth=HTTPBasicAuth(username, password))
         for term in terminal_info.json()['data']:
             term_did_list[term['obj_attributes']['did']] = term['obj_id']
-        print ("The dictionary for the did list", term_did_list) 
+        #print ("The dictionary for the did list", term_did_list) 
 
     return term_did_list
 
@@ -1495,7 +1494,7 @@ def get_terminal_info(ip, username, password):
     #    brea
     finally:
         terminal_info = requests.get(api_uri, data=None, headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-        print "I AM IN TERMINAL INFO...", terminal_info
+        #print "I AM IN TERMINAL INFO...", terminal_info
         for term in terminal_info.json()['data']:
             term_ip_list[term['obj_attributes']['coremodule_id']] = term['obj_attributes']['mgmtipaddress']
             term_termtype_list.append(term['obj_attributes']['terminaltype_id'])
@@ -1529,12 +1528,12 @@ def get_channel_info(ip, username, password):
         headers =  {"Content-Type":"application/json"}
         api_uri = 'http://{api_endpoint}/{nms_api}'.format(api_endpoint=ip, nms_api=API)
         channel_info = requests.get(api_uri, data=None, headers=headers, params=None, auth=HTTPBasicAuth(username, password))
-        #print get_info_request_channel_info 
+        ##print get_info_request_channel_info 
     
         get_info_request_in_json = channel_info.json()['data']
     
         #get_info_request_in_json = json.dumps(get_info_request_in_json, indent=4, sort_keys=True)
-        #print get_info_request_in_json
+        ##print get_info_request_in_json
 
         rtn_bw_list = []
         channel_list = []
@@ -1546,7 +1545,7 @@ def get_channel_info(ip, username, password):
             fw_bw_value = bw["obj_attributes"]["fwdbandwidth"]
             fw_bw_obj_id = bw["obj_id"]
             
-            print "The forward Bandwidth is", fw_bw_value
+            #print "The forward Bandwidth is", fw_bw_value
             channel_list.append(fw_bw_value)
 
         channel_value = max(channel_list) 
@@ -1572,7 +1571,7 @@ def get_channel_info(ip, username, password):
                 r_channel["fwdgatewayfrequency"] = channel['obj_attributes']['fwdgatewayfrequency']
                 r_channel["fwdbandwidth"] = channel['obj_attributes']['fwdbandwidth']
                 channel_revert_list.append(r_channel)
-        print("THE CHANNEL LIST IS GIVEN BY>>>>>>", channel_list) 
+        #print("THE CHANNEL LIST IS GIVEN BY>>>>>>", channel_list) 
         """
     return channel_value, fw_gw_user_tuple_list, fw_bw_obj_id, fw_gw_freq, fw_user_freq   
 
@@ -1626,14 +1625,14 @@ def get_pp_info(ip, username, password):
     write_access_log(ip, "cluster status", cmd_ouput)
     
     test = process_cluster_output(cmd_ouput, "cluster status")
-    print ("THE TEST", test)
+    #print ("THE TEST", test)
     json_cmd = json.loads(test)
 
     ip_list = []
     for item in json_cmd["NODES"]:
         ip_list.append(str(item["ip"].split(";")[1]))
     
-    print "The IP LIST is : ", ip_list
+    #print "The IP LIST is : ", ip_list
     
     return ip_list
 
@@ -1667,20 +1666,20 @@ def test_sat0_reach(ip, user, password, modcod_list_length, work_s2, active_obje
     
     test_ssh_op = test_python_script_network.Ssh_Console(ip, user, password)
 
-    print "cmd_output", test_ssh_op
+    #print "cmd_output", test_ssh_op
     send_string = test_ssh_op.send_string_and_wait("ssh -o StrictHostKeyChecking=no root@172.17.224.152", exit_on_error= False)
-    print "The send_string", send_string
+    #print "The send_string", send_string
 
     send_string_ssh = test_ssh_op.send_string_and_wait("iDirect\n", exit_on_error= False)
-    print ("The output", send_string_ssh)
+    #print ("The output", send_string_ssh)
 
     telnet_run_command = test_ssh_op.telnet_run_command("", "rx griffin stats")
     telnet_command_output_reset = test_ssh_op.send_the_command_in_telnet("rx griffin stats reset")
     telnet_command_output = test_ssh_op.send_the_command_in_telnet("rx griffin stats")
-    print ("THE RX GRIFFIN STATS", telnet_command_output)
+    #print ("THE RX GRIFFIN STATS", telnet_command_output)
     
     telnet_command_output = telnet_command_output[telnet_command_output.find("Receiver ID 1"): telnet_command_output.rfind("[GRIFFIN] ") + 1]
-    print("THE GRIFFIN STATS", telnet_command_output)
+    #print("THE GRIFFIN STATS", telnet_command_output)
 
     telnet_command_output_split = telnet_command_output.split("\r\n")
     del telnet_command_output_split[0]
@@ -1691,14 +1690,14 @@ def test_sat0_reach(ip, user, password, modcod_list_length, work_s2, active_obje
     for element in telnet_command_output_split:
         item_element = element[18:]
         telnet_append_list.append(item_element)
-    print "The split list", telnet_command_output_split
-    print "The split list append", telnet_append_list
+    #print "The split list", telnet_command_output_split
+    #print "The split list append", telnet_append_list
 
     telnet_append_list_extend = []
     for items in telnet_append_list:
         telnet_append_list_extend.append(items.split())
 
-    print("THE LIST ON SPLIT IS>>>", telnet_append_list_extend)
+    #print("THE LIST ON SPLIT IS>>>", telnet_append_list_extend)
 
     del telnet_append_list_extend[-1]
     del telnet_append_list_extend[-1]
@@ -1712,9 +1711,9 @@ def test_sat0_reach(ip, user, password, modcod_list_length, work_s2, active_obje
         crc8_list.append(telnet_append_list_extend[element][4])
         crc32_list.append(telnet_append_list_extend[element][5])
     
-    print "MODCOD", modcod_list
-    print "CRC8", crc8_list
-    print "CRC32", crc32_list
+    #print "MODCOD", modcod_list
+    #print "CRC8", crc8_list
+    #print "CRC32", crc32_list
     
     modcod_list_length = 10 
     func_contain_excel_generation_downstream_crc(modcod_list, crc8_list, crc32_list,  modcod_list_length, active_object_state, work_s2, work_b)
@@ -1724,7 +1723,7 @@ def test_sat0_reach(ip, user, password, modcod_list_length, work_s2, active_obje
 def func_contain_excel_generation_downstream_crc(modcod_list, crc8_list, crc32_list,  modcod_list_length, active_object_state, work_s2, work_b):
     work_book_name = os.path.expanduser("~\\Downstream_Excel.xlsx")
     if os.path.exists(work_book_name):
-        print "The workbook is given by"
+        #print "The workbook is given by"
         excel_sheet_generation_crc(modcod_list, crc8_list, crc32_list, modcod_list_length, active_object_state, work_s2, work_b)
 
     #file_text = "C:\\Users\\akarthik\\Downloads\\griffin.txt"
@@ -1755,9 +1754,9 @@ def excel_sheet_generation_crc(modcod_list, crc8_list, crc32_list, modcod_list_l
         import copy
 
     finally:
-        #print("The value of row", row)
+        ##print("The value of row", row)
         modcod_list_length_crc = 10
-        print("<<<<<THE MODCOD LIST LENGTH IS GIVEN>>>>", modcod_list_length_crc) 
+        #print("<<<<<THE MODCOD LIST LENGTH IS GIVEN>>>>", modcod_list_length_crc) 
         work_s = active_object_state.active
         
         
@@ -1777,8 +1776,8 @@ def excel_sheet_generation_crc(modcod_list, crc8_list, crc32_list, modcod_list_l
             dictionary_values_set = ''.join(dictionary_set.values()[i])
             dictionary_list_values.append(dictionary_values_set)
         
-        print (dictionary_list_values)
-       # print("COUNTER", counter)
+        #print (dictionary_list_values)
+       # #print("COUNTER", counter)
        """
         #items = [i for i in modcod_list]
         i = 0
@@ -1786,10 +1785,10 @@ def excel_sheet_generation_crc(modcod_list, crc8_list, crc32_list, modcod_list_l
         k = 1
         l = 0
         m = 1
-        print("THE LENGTH OF THE MODCOD>>", len(modcod_list))
+        #print("THE LENGTH OF THE MODCOD>>", len(modcod_list))
         for i in range(0, len(modcod_list)-1):
-            print "MODCOD LIST", modcod_list[i]
-            print "MODCOD LIST", type(modcod_list[i])
+            #print "MODCOD LIST", modcod_list[i]
+            #print "MODCOD LIST", type(modcod_list[i])
             i+=1
         row_counter= modcod_list_length_crc+1 
         cell_ref = work_s.cell(row = row_counter, column=2)
@@ -1843,7 +1842,7 @@ def excel_sheet_generation_crc(modcod_list, crc8_list, crc32_list, modcod_list_l
             
             data8 = Reference(work_s, min_col=1, min_row=row_counter_crc_data, max_col=2, max_row=row_counter_crc_data)
             data32 = Reference(work_s, min_col=4, min_row=row_counter_crc_data, max_col=5, max_row=row_counter_crc_data)
-            print ("THE DATA IS>>>>", data8)
+            #print ("THE DATA IS>>>>", data8)
             c.add_data(data8, titles_from_data=True)
             c1.add_data(data32, titles_from_data=True)
 
@@ -1886,7 +1885,7 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
     
     # Get Channel Info
     channel, c_rev_list, fw_bw_obj_id, fw_gw_freq, fw_user_freq = get_channel_info(NMS_NODEIP, NMS_USER, NMS_PASSWORD)
-    print "THE CREVLIST", c_rev_list
+    #print "THE CREVLIST", c_rev_list
 #    (gw_orig, user_orig) = c_rev_list
 
     try:
@@ -1904,16 +1903,16 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
         #data_test = data['symbols']   
         
         #test_symbols = "symbols" in data
-        #print "test_symbols", test_symbols
+        ##print "test_symbols", test_symbols
 
         #elements_list = []
         #for elements in data["symbols"]:
-        #    print elements
+        #    #print elements
         #    elements_list.append(elements)
 
-        #print "The list is as follows", elements_list
+        ##print "The list is as follows", elements_list
             
-        #print "The symbol list is given by", elements
+        ##print "The symbol list is given by", elements
 
         # Get the list of nodes in pp cluster    
         pp_ip_list = get_pp_info(PP_NODEIP, PP_USER, PP_PASSWORD)
@@ -1928,19 +1927,19 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
         for ip in pp_ip_list:
             pp_did_list = pp_did_list + get_terminal_did_list(ip, PP_USER, PP_PASSWORD, PP_TPA)
 
-        print ("The DID LIST", pp_did_list)
+        #print ("The DID LIST", pp_did_list)
         
 
         if DEBUG:
-            print "PP IP List:" + str(pp_ip_list)
-            print "Terminaltype default maxmodcod List:\n" + str(def_maxmodcod)
-            print "Terminal DID List:\n" + str(term_did_list)
-            print "Terminal IP List:\n" + str(term_ip_list)
-            print "Terminal Type List:\n" + str(term_termtype_list)
-            print "Terminal DID (PP) List:\n" + str(pp_did_list)
-            print "Channel List:\n" + str(channel)
-            print "Downstream Carrier List:\n" + str(down_list)
-        
+            #print "PP IP List:" + str(pp_ip_list)
+            #print "Terminaltype default maxmodcod List:\n" + str(def_maxmodcod)
+            #print "Terminal DID List:\n" + str(term_did_list)
+            #print "Terminal IP List:\n" + str(term_ip_list)
+            #print "Terminal Type List:\n" + str(term_termtype_list)
+            #print "Terminal DID (PP) List:\n" + str(pp_did_list)
+            #print "Channel List:\n" + str(channel)
+            #print "Downstream Carrier List:\n" + str(down_list)
+            print("test") 
         SYMBOLS = [1000, 5000, 10000, 20000, 30000, 45000]
         #SYMBOLS = [1000]
         #gw_freq_list = [1.0, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35, 1.40, 1.45, 1.50, 1.55, 1.60, 1.65, 1.70, 1.75, 1.80, 1.85, 1.90, 1.95]
@@ -1950,24 +1949,16 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
 
         gw_user_pair = zip(gw_freq_list, user_freq_list)
 
-        print ("THE COMINATION PAIR OF GW AND USER", gw_user_pair)
+        #print ("THE COMINATION PAIR OF GW AND USER", gw_user_pair)
 
         modcod_list_length = 10
 
-        print("<<THE MODCOD LIST LENGTH>>", modcod_list_length)
+        #print("<<THE MODCOD LIST LENGTH>>", modcod_list_length)
         #SYMBOLS_from_file = 
         #test_symbols = SYMBOLS
 
-        if len(SYMBOLS) == 6:
-        # SYMBOLS = SYMBOLS_from_file
-        
-
-            print "I am in if condition"
-            print "The symbol list is given by", SYMBOLS
-
-        print "I am here"
         #counter += 1
-        #print counter
+        ##print counter
         
         '''The workbook object created to open the workbook'''
         import openpyxl
@@ -1975,9 +1966,9 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
         work_book_name = os.path.expanduser('~\\Downstream_Excel.xlsx')
         
         work_b.save(work_book_name) 
-            # print "the obj declaration", test_work
+            # #print "the obj declaration", test_work
         
-        #print "The work_book", type(work_b)   
+        ##print "The work_book", type(work_b)   
         #excel_sheet_generation.counter+=1
 
         dictionary_test = OrderedDict()
@@ -1987,38 +1978,38 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
         work_sheet_rename = work_b.get_sheet_by_name("Sheet")
         work_sheet_rename.title = "Raw Data"
         for carrier in down_list:
-            print("------------------------------------")
-            print("<<<OBJ ID IS GIVEN BY>>>>", carrier)
+            #print("------------------------------------")
+            #print("<<<OBJ ID IS GIVEN BY>>>>", carrier)
             
             for gw, u_freq in gw_user_pair:
                 active_object_state = openpyxl.load_workbook(work_book_name)
                 work_s2 = active_object_state.create_sheet("Chart%s,%s"%(gw, u_freq))
                  
-                print("<<<GW FREQUENCY IS>>", gw)
+                #print("<<<GW FREQUENCY IS>>", gw)
                 change_gw_frequency(NMS_NODEIP, NMS_USER, NMS_PASSWORD, fw_bw_obj_id, str(gw))
                 apply_changes(NMS_NODEIP, NMS_USER, NMS_PASSWORD, fw_bw_obj_id)
-                print("<<<<USER_FREQUENCY IS>>>>", u_freq)
+                #print("<<<<USER_FREQUENCY IS>>>>", u_freq)
                 change_user_frequency(NMS_NODEIP, NMS_USER, NMS_PASSWORD, fw_bw_obj_id, str(u_freq))
                 apply_changes(NMS_NODEIP, NMS_USER, NMS_PASSWORD, fw_bw_obj_id)
                 for symbol in SYMBOLS:
-                    print("<<<<<<<<SYMBOL LIST HIT>>>>>>>>>", symbol)
+                    #print("<<<<<<<<SYMBOL LIST HIT>>>>>>>>>", symbol)
                     # for channel in c_list:
-                    #     print("<<<<<<<<<<<THE CARRIER FREQUNCY>>>>>>")
-                    #     print("-------------------------------------")
-                    #     print("THE CARRIER FREQUENCY IS GIVEN BY.....", channel)
+                    #     #print("<<<<<<<<<<<THE CARRIER FREQUNCY>>>>>>")
+                    #     #print("-------------------------------------")
+                    #     #print("THE CARRIER FREQUENCY IS GIVEN BY.....", channel)
                     change_symbol_rate(NMS_NODEIP, NMS_USER, NMS_PASSWORD, str(carrier), symbol)
                     apply_changes(NMS_NODEIP, NMS_USER, NMS_PASSWORD, str(carrier))
                     
                     # Change maxmodcod
                     for modcod in modcod_list:
-                        print("<<<MOD COD >>>", modcod)
+                        #print("<<<MOD COD >>>", modcod)
                         for term_type in set(term_termtype_list):
-                            print "<<<TERMTYPE>>>", term_type
-                            print "<<<TERMTYPE LIST>>>", term_termtype_list
+                            #print "<<<TERMTYPE>>>", term_type
+                            #print "<<<TERMTYPE LIST>>>", term_termtype_list
                             change_maxmodcod(NMS_NODEIP, NMS_USER, NMS_PASSWORD, term_type, modcod)
                             apply_changes(NMS_NODEIP, NMS_USER, NMS_PASSWORD, term_type)
                         
-                        print "Sleep, to let the configuration propogate......"
+                        #print "Sleep, to let the configuration propogate......"
                         time.sleep(60)
 
                         #Reset PP stats
@@ -2027,7 +2018,7 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
                     #Ping terminals
                         for did in pp_did_list:
                             terminal_list = term_did_list[did]
-                            print("The terminal list is GIVEN BY>>>", terminal_list)
+                            #print("The terminal list is GIVEN BY>>>", terminal_list)
                             terminal_ip = term_ip_list[str(term_did_list[did])]
                             reset_terminal_stats(terminal_ip, "root", "iDirect")
                             if (platform.system == 'Windows'):
@@ -2038,28 +2029,24 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
                                 subprocess.call(cmd_ping) 
                         # Run commands on PP
                         for ip in pp_ip_list:
-                            print("EXCEL SHEET HIT....")
-                            print("Before running the PP Commands")
+                            #print("EXCEL SHEET HIT....")
+                            #print("Before running the PP Commands")
                             run_pp_commands(ip, PP_USER, PP_PASSWORD, PP_TPA, work_b, dictionary_test, dictionary_list_combined, carrier, work_s2, active_object_state, gw, u_freq, modcod_list_length, SYMBOLS, flag=True)
 
                     # Run commands on carrierRemote
                         for did in pp_did_list:
                             test_sat0_reach(NMS_NODEIP, "idirect", "iDirect", modcod_list_length, work_s2, active_object_state, work_b)
-                            print("In the for loop for the pp did check")
+                            #print("In the for loop for the pp did check")
                             #get_terminal_stats(term_ip_list[str(term_did_list[did])], "root", "iDirect")
                             
-                            if DEBUG:
-                                print "DID: " + str(did)
-                                print "Terminal ID: " + str(term_did_list[did])
-                                print "Terminal IP: " + str(term_ip_list[str(term_did_list[did])])
 
     except KeyboardInterrupt:
         import requests
-        print "Change modcod to previous values:\n"
+        #print "Change modcod to previous values:\n"
         filename = "C:\\Users\\akarthik\\Downloads\\New_folder\\config.json"
         NMS_USER, NMS_PASSWORD, PP_USER, PP_PASSWORD, PP_TPA, NMS_NODEIP, PP_NODEIP, SYMBOLS = func_include_filename(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
         def_maxmodcod = default_maxmodcod(NMS_NODEIP, NMS_USER, NMS_PASSWORD)
-        print ("THE DEFAULT MODCOD>>>", def_maxmodcod) 
+        #print ("THE DEFAULT MODCOD>>>", def_maxmodcod) 
         for term_type in def_maxmodcod:
             for key,value in def_maxmodcod.items():
                 maxmodcod_value = def_maxmodcod.values()
@@ -2079,11 +2066,11 @@ def main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list):
             change_gw_frequency(NMS_NODEIP, NMS_USER, NMS_PASSWORD,  fw_bw_obj_id, fw_gw_freq)
             change_user_frequency(NMS_NODEIP, NMS_USER, NMS_PASSWORD,  fw_bw_obj_id, fw_user_freq)
             apply_changes(NMS_NODEIP, NMS_USER, NMS_PASSWORD,  fw_bw_obj_id)   
-        print("PLEASE CLOSE THE CONSOLE TO RETURN TO THE CMD PROMPT....")
+        #print("PLEASE CLOSE THE CONSOLE TO RETURN TO THE CMD PROMPT....")
     
-    # print "\nACCESS LOGS: /tmp/layer1_access.log\n"
+    # #print "\nACCESS LOGS: /tmp/layer1_access.log\n"
 
 if __name__ == '__main__':
     #filename = sys.argv[1]
-    #print ("The filename is", filename)
+    ##print ("The filename is", filename)
     main(nms_ip, nms_user, nms_pass, pp_ip, pp_user, pp_pass, symbol_list)
