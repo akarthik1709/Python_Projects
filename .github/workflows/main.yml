@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: PortfolioFy
-          uses: kaustubhgupta/PortfolioFy@v3.1
+          uses: kaustubhgupta/PortfolioFy@v3.2
           with:
             gh_token: ${{ secrets.TOKEN }}
             stats_choice: 4
@@ -20,4 +20,4 @@ jobs:
             hackathons: False
             #social_links: "https://www.linkedin.com/in/kaustubh-gupta/, https://twitter.com/Kaustubh1828, https://medium.com/@kaustubhgupta1828"
             allow_footer: False
-            #project_sort_by: 'forks'
+            project_sort_by: 'forks'
