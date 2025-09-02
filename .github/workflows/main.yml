@@ -14,15 +14,7 @@ jobs:
       - name: Decode the GitHub App Private Key
         id: decode
         run: |
-          private_key=$(echo "${{ secrets.PRIVATE_KEY }}" | base64 -d | awk 'BEGIN {ORS="\\n"} {print}' | head -c -2) &> /dev/null
-          echo "::add-mask::$private_key"
-          echo "private-key=$private_key" >> "$GITHUB_OUTPUT"
-          echo $GITHUB_OUTPUT
-      - uses: actions/create-github-app-token@v2
-        id: app-token
-        with:
-          app-id: 1886822
-          private-key: "-----BEGIN RSA PRIVATE KEY----- 
+          private_key=$(echo "-----BEGIN RSA PRIVATE KEY----- 
 MIIEpAIBAAKCAQEAtb+43H53Gy/ohsPbYD+ICnAZAI8mWQ0yA8DzlNrtfCXdGjSq 
 gmRSGWO4uqDOk7pHkyamvdczb1vtLo6nlLUxx68DLKfnKyRmKQ/2fwO3t9wlmrfJ 
 8c4itlpf1GDYQeuZHdWNAJIyi24C4ZHYyNqE9nPQvmDU0V0gupgW2CF9Q+EdBqam 
@@ -48,7 +40,15 @@ yAY0Id4y6W6ukCZxpOi2q1x51PoOGo06EE8w43YSWCeigIRvBwlWCK6jP+SEn1et
 N0o9VwKBgQCDmv8yzEBaWDYsgsk8j9o79PLkAXQubhcMRrxRoj/KGcbQT+3mavQb
 A0+2sxY5kI5t/C3UcS6leFOyFIzI00ffqjwFjv0ir1uujn1ylqookt2zXqvWCR0i
 aX1UY1wA39DxdBlZNIZOiz3GZQduqJ35USM+W451xE0HwAYDSRiU3g==
------END RSA PRIVATE KEY-----"
+-----END RSA PRIVATE KEY-----" | base64 -d | awk 'BEGIN {ORS="\\n"} {print}' | head -c -2) &> /dev/null
+          echo "::add-mask::$private_key"
+          echo "private-key=$private_key" >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: 1886822
+          private-key: ${{ steps.decode.outputs.private-key }}
       - uses: actions/checkout@v2
       - uses: akarthik1709/PortfolioFy@main
         with:
