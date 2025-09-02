@@ -13,4 +13,14 @@ jobs:
         - name: PortfolioFy
           uses: kaustubhgupta/PortfolioFy@v3.2.1
           with:
-            gh_token: ${{ secrets.TOKEN }}
+            gh_token: ${{ secrets.TOKEN }},
+            theme: 1,
+            blogs: false,
+            hackathons: false,
+            stats_choice: 1,
+            stats_customization: false,
+            current_repo_path: /home/runner/work/Python_Projects/Python_Projects,
+            current_repo_branch: refs/heads/master1,
+            resume_link: false,
+            allow_footer: true,
+            social_links: false
