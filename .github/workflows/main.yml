@@ -12,6 +12,6 @@ jobs:
     permissions: write-all
     steps:
       - uses: actions/checkout@v2
-      - uses: kaustubhgupta/PortfolioFy@main
+      - uses: akarthik1709/PortfolioFy@main
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
