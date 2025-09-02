@@ -9,6 +9,10 @@ jobs:
   updating-portfolio:
     name: update-index-with-project
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
     steps:
       - uses: actions/checkout@v2
       - uses: akarthik1709/PortfolioFy@main
