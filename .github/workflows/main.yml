@@ -14,5 +14,3 @@ jobs:
       - uses: kaustubhgupta/PortfolioFy@v3.2.1
         with:
           gh_token: ${{ secrets.TOKEN }}
-          allow_footer: false
-          project_sort_by: 'stars'
