@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: PortfolioFy
-          uses: kaustubhgupta/PortfolioFy@dev
+          uses: kaustubhgupta/PortfolioFy@v3.1
           with:
             gh_token: ${{ secrets.TOKEN }}
