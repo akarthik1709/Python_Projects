@@ -15,4 +15,4 @@ jobs:
         with:
           gh_token: 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
           allow_footer: false
-          project_sort_by: 'stars
+          project_sort_by: 'stars'
