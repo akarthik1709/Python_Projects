@@ -11,11 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
+      - name: Decode the GitHub App Private Key
+        id: decode
+        run: |
+          private_key=$(echo "${{ secrets.PRIVATE_KEY }}" | base64 -d | awk 'BEGIN {ORS="\\n"} {print}' | head -c -2) &> /dev/null
+          echo "::add-mask::$private_key"
+          echo "private-key=$private_key" >> "$GITHUB_OUTPUT"
       - uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: 1886822
-          private-key: ${{ secrets.PRIVATE_KEY }}
+          private-key: ${{ steps.decode.outputs.private-key }}
       - uses: actions/checkout@v2
       - uses: akarthik1709/PortfolioFy@main
         with:
