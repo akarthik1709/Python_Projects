@@ -14,4 +14,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: akarthik1709/PortfolioFy@main
         with:
-          gh_token: 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
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
