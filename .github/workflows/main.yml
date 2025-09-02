@@ -13,6 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: kaustubhgupta/PortfolioFy@v3.2
         with:
-          gh_token: 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
+          gh_token: ${{ secrets.TOKEN }}
           allow_footer: false
           project_sort_by: 'stars'
