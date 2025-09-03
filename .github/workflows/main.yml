@@ -21,3 +21,4 @@ jobs:
         with:
           gh_token: ${{ steps.app-token.outputs.token }}
           theme: 2
+          stats_choice: 2
